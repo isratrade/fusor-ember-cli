@@ -1,0 +1,125 @@
+{{#if detectNodesErrorMsg}}
+  <div class="row new-node-detect-infobar">
+    <div class="col-xs-1 new-node-detect-infobar-col">
+      <div class="new-node-detect-infobar-left">
+        <span class="fa fa-exclamation-triangle detect-nodes-error-icon"></span>
+      </div>
+    </div>
+    <div class="col-xs-9 new-node-detect-infobar-col">
+      <div class="new-node-detect-infobar-middle">
+        <span>{{detectNodesErrorMsg}}</span>
+      </div>
+    </div>
+    <div class="col-xs-2 new-node-detect-infobar-col">
+      <div class="new-node-detect-infobar-right">
+        <a {{action "submitDetectNodes"}}>Re-scan</a>
+      </div>
+    </div>
+  </div>
+{{else if detectNodesCanceled}}
+  <div class="row new-node-detect-infobar">
+    <div class="col-xs-1 new-node-detect-infobar-col">
+      <div class="new-node-detect-infobar-left">
+        <span class="fa fa-exclamation-triangle"></span>
+      </div>
+    </div>
+    <div class="col-xs-9 new-node-detect-infobar-col">
+      <div class="new-node-detect-infobar-middle">
+        <span>Detection canceled.</span>
+      </div>
+    </div>
+    <div class="col-xs-2 new-node-detect-infobar-col">
+      <div class="new-node-detect-infobar-right">
+        <a {{action "submitDetectNodes"}}>Re-scan</a>
+      </div>
+    </div>
+  </div>
+{{else if autoDetectNodesInProgress}}
+  <div class="row new-node-detect-infobar">
+    <div class="col-xs-1 new-node-detect-infobar-col">
+      <div class="new-node-detect-infobar-left">
+        <span class="spinner spinner-sm spinner-inline"></span>
+      </div>
+    </div>
+    <div class="col-xs-9 new-node-detect-infobar-col">
+      <div class="new-node-detect-infobar-middle">
+        <span>Detecting nodes...</span>
+      </div>
+    </div>
+    <div class="col-xs-2 new-node-detect-infobar-col">
+      <div class="new-node-detect-infobar-right">
+        <a {{action "cancelDetectNodes"}}>Cancel</a>
+      </div>
+    </div>
+  </div>
+{{else}}
+  <div class="row new-node-detect-infobar">
+    <div class="col-xs-1 new-node-detect-infobar-col">
+      <div class="new-node-detect-infobar-left">
+        <span class="pficon pficon-info"></span>
+      </div>
+    </div>
+    <div class="col-xs-9 new-node-detect-infobar-col">
+      <div class="new-node-detect-infobar-middle">
+        <span>Detection finished.</span>
+      </div>
+    </div>
+    <div class="col-xs-2 new-node-detect-infobar-col">
+      <div class="new-node-detect-infobar-right">
+        <a {{action "submitDetectNodes"}}>Re-scan</a>
+      </div>
+    </div>
+  </div>
+{{/if}}
+
+<div class="row">
+  <div class="col-xs-12">
+    <p>Choose a network interface for registration on any node with multiple detected.
+      Unselected nodes will not be registered.</p>
+  </div>
+</div>
+
+<div class="row node-auto-detect-status">
+  <div class="col-xs-2 new-node-auto-detect-label-section">
+    <span><strong>Node Status:</strong></span>
+  </div>
+  <div class="col-xs-2 new-node-auto-detect-count-section">
+    {{#if hasInvalidAutoDetectedNodes}}
+      <span class="new-node-detect-invalid-icon fa fa-times-circle-o"></span>
+    {{/if}}
+    <span class="new-node-auto-detect-count">{{numAutoDetectedNodesInvalidCount}}</span>
+  </div>
+  <div class="col-xs-2 new-node-auto-detect-text-section">
+    <div>unassigned</div>
+    <div>interfaces</div>
+  </div>
+  <div class="col-xs-1 new-node-auto-detect-count-section light-left-border">
+    <span class="new-node-auto-detect-count">{{numAutoDetectedNodesValidCount}}</span>
+  </div>
+  <div class="col-xs-3 new-node-auto-detect-text-section">
+    <div>nodes selected</div>
+    <div>to register</div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-xs-12">
+    {{#if autoDetectNodesInProgress}}
+      <p><strong>No nodes detected yet...</strong></p>
+    {{else}}
+      {{#if noNodesDetected}}
+        <p><strong>No nodes detected.</strong> <span class="new-node-auto-detect-error">{{autoDetectedNodesErrorMsg}}</span></p>
+      {{/if}}
+
+      <div class="new-node-detect-hosts-container">
+        {{#if hasAutoDetectedNodes}}
+          <div class="new-node-detect-list">
+            {{#each autoDetectedNodes as |host index| }}
+              {{auto-node-registration-mac-address host=host index=index}}
+            {{/each}}
+          </div>
+        {{/if}}
+      </div>
+    {{/if}}
+  </div>
+</div>

@@ -1,0 +1,119 @@
+{{#if showSpinner}}
+  <div class="spinner spinner-md spinner-inline"></div>
+  <span class="spinner-text">
+    Loading OSP Nodes
+  </span>
+{{else}}
+  {{#if loadErrorMsg}}
+    <div class="row register-nodes-errors">
+      <div class="col-md-9 col-lg-6">
+        <div class="alert alert-danger rhci-alert">
+          <i class="fa fa-2x fa-times-circle-o errorForValidation validation-alert-icon"></i>
+          <p class="validation-alert-message">{{loadErrorMsg}}</p>
+        </div>
+      </div>
+    </div>
+  {{/if}}
+
+  {{#if errorMsg}}
+    <div class="row register-nodes-errors">
+      <div class="col-md-9 col-lg-6">
+        <div class="alert alert-danger rhci-alert">
+          <i class="fa fa-2x fa-times-circle-o errorForValidation validation-alert-icon"></i>
+          <p class="validation-alert-message">{{errorMsg}}</p>
+        </div>
+      </div>
+    </div>
+  {{/if}}
+
+  {{#if showNodeErrors}}
+    <div class="row register-nodes-errors">
+      <div class="col-md-9 col-lg-6">
+        <div class="alert alert-danger rhci-alert">
+          <i class="fa fa-2x fa-times-circle-o errorForValidation validation-alert-icon"></i>
+          <p class="validation-alert-message">The following nodes have errors:</p>
+          <ul class="validation-alert-message">
+            {{#each nodeErrors as |nodeError|}}
+              <li><a href="{{nodeError.taskUrl}}" target="_blank" class="foreman-task-error-link">{{nodeError.message}}</a></li>
+            {{/each}}
+          </ul>
+        </div>
+      </div>
+    </div>
+  {{/if}}
+
+  <div class="row">
+    <div class="col-md-9 col-lg-6">
+      <p>Register at least 2 nodes with the selected undercloud to build out your OpenStack environment.</p>
+    </div>
+  </div>
+
+  {{#if hasNodes}}
+    <div class="row">
+      <div class="col-md-9 col-lg-6">
+        <button id="register-nodes-button" class="btn btn-default register-more-nodes-button"
+          {{action "showNodeRegistrationModal"}} disabled={{isStarted}}>
+          Register More Nodes
+        </button>
+      </div>
+    </div>
+  {{else}}
+    <div class="row">
+      <div class="col-md-9 col-lg-6">
+        <button id="register-nodes-button" class="btn btn-primary register-nodes-button"
+          {{action "showNodeRegistrationModal"}} disabled={{isStarted}}>
+          Register Nodes
+        </button>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-9 col-lg-6">
+        <p>
+          No nodes have been registered yet. Discover nodes through auto-detection,
+          mapping them in a CSV file, or entering node information manually.
+        </p>
+      </div>
+    </div>
+  {{/if}}
+
+  <div class="osp-node-manager-list">
+    {{#each nodeManagers as |nodeManager|}}
+      {{osp-node-manager  nodeManager=nodeManager
+                          ports=ports
+                          introspectionTasks=introspectionTasks
+                          foremanTasks=foremanTasks
+                          disabled=isStarted
+                          addNodes="addNodesToManager"
+                          deleteNode="deleteNode"}}
+    {{/each}}
+  </div>
+{{/if}}
+
+{{cancel-back-next  backRouteName="openstack.undercloud-deploy"
+                    disableBack=false
+                    nextRouteName="openstack.assign-nodes"
+                    disableNext=disableRegisterNodesNext
+                    disableCancel=isStarted
+                    deploymentName=deploymentName}}
+
+{{new-node-registration openModal=openModalNewNode
+                        deployment=deployment
+                        openstackDeployment=openstackDeployment
+                        ports=ports
+                        introspectionTasks=introspectionTasks
+                        foremanTasks=foremanTasks
+                        submitRegisterNodes="submitRegisterNodes"}}
+
+{{add-node-registration openModal=openModalAddNode
+                        nodeInfo=addNodeInfo
+                        deployment=deployment
+                        openstackDeployment=openstackDeployment
+                        ports=ports
+                        introspectionTasks=introspectionTasks
+                        foremanTasks=foremanTasks
+                        submitAddNodes="submitAddNodes"}}
+
+{{delete-node-confirmation openModal=openModalDeleteNode
+                           nodeToDeleteLabel=nodeToDeleteLabel
+                           confirmDeleteNode="confirmDeleteNode"}}

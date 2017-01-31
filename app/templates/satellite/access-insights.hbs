@@ -1,0 +1,23 @@
+<div class="row">
+  <div class='col-md-6'>
+    <p>
+      <a href='https://access.redhat.com/insights/' target='_blank'>Red Hat Insights</a> empowers you to monitor and proactively resolve infrastructure configuration and security risks, enabling real time infrastructure health monitoring by Red Hat’s trusted software and security engineering teams.
+    </p>
+    <p>
+      Select whether to enable Red Hat Insights for this deployment.
+    </p>
+
+    {{input type="checkbox" name="enable_access_insights" disabled=isStarted checked=model.enable_access_insights data-qci="enable_access_insights"}}
+    <span class={{analyticsColor}}>
+      Enable Red Hat Insights
+    </span>
+
+  </div>
+</div>
+
+<br />
+{{cancel-back-next backRouteName='configure-environment'
+                   disableBack=false
+                   nextRouteName=step2RouteName
+                   disableNext=false
+                   disableCancel=isStarted}}

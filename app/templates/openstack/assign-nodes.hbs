@@ -1,0 +1,102 @@
+{{#if errorMsg}}
+  <div class="row">
+    <div class='col-md-9'>
+      <div class='alert alert-danger rhci-alert'>
+        <i class="fa fa-2x fa-times-circle-o errorForValidation"></i>
+        &nbsp;
+        {{errorMsg}}
+      </div>
+    </div>
+  </div>
+{{else if showSpinner}}
+  <div class="spinner spinner-md spinner-inline"></div>
+  <span class='spinner-text'>
+    Loading...
+  </span>
+{{else}}
+  <div class="row">
+    <div class="col-md-12" style="float: left;">
+      <h2 style="vertical-align: bottom;display:inline-block;">Available Deployment Roles</h2>
+      {{#unless isStarted}}
+        <a class="edit-global-config" {{action "editGlobalServiceConfig"}}> Edit Global Configuration</a>
+      {{/unless}}
+      {{#draggable-object-target action="unassignRole"}}
+        <div class="row col-md-12 deployment-roles deployment-roles-unassigned deployment-roles-assignable {{droppableClass}}">
+          {{#each unassignedRoles as |role|}}
+            {{#draggable-object content=role data-qci=role.roleType}}
+              {{deployment-role role=role edit="editRole" disabled=isStarted}}
+            {{/draggable-object}}
+          {{/each}}
+          {{#if allRolesAssigned}}
+            <span class="deployment-roles-all-assigned">All deployment roles have been assigned.</span>
+          {{/if}}
+        </div>
+      {{/draggable-object-target}}
+    </div><!-- /col -->
+  </div><!-- /row -->
+  <div class="row">
+      <div class="col-md-12">
+          <h2>Flavors</h2>
+          {{#each profiles as |profile|}}
+              <div class="row">
+                  <div class='col-md-7'>
+                    {{#if nodes}}
+                      {{node-profile profile=profile
+                                     nodes=nodes
+                                     plan=plan
+                                     roles=roles
+                                     allRolesAssigned=allRolesAssigned
+                                     doAssign=true
+                                     disabled=isStarted
+                                     assignRole="assignRole"
+                                     unassignRole="unassignRole"
+                                     editRole="editRole"
+                                     roleCountUpdated="roleCountUpdated"}}
+                   {{else}}
+                      {{node-profile profile=profile
+                                     plan=plan
+                                     roles=roles
+                                     allRolesAssigned=allRolesAssigned
+                                     doAssign=true
+                                     disabled=isStarted
+                                     assignRole="assignRole"
+                                     unassignRole="unassignRole"
+                                     editRole="editRole"
+                                     roleCountUpdated="roleCountUpdated"}}
+                   {{/if}}
+                  </div>
+              </div>
+          {{/each}}
+      </div>
+      <div class="col-sm-6 col-md-5">
+          <!-- a network topology is planned for this space -->
+      </div>
+  </div>
+
+  {{cancel-back-next backRouteName='openstack.register-nodes'
+                     disableBack=false
+                     nextRouteName='openstack.overcloud'
+                     disableNext=disableAssignNodesNext
+                     disableCancel=isStarted
+                     deploymentName=deploymentName}}
+
+  {{edit-deployment-role openModal=openModalEditRole
+                         settingsActiveClass=settingsActiveClass
+                         configActiveClass=configActiveClass
+                         doShowSettings='doShowSettings'
+                         doShowConfig='doShowConfig'
+                         images=images
+                         profiles=profiles
+                         nodes=nodes
+                         editedRole=editedRole
+                         editedRoleImage=editedRoleImage
+                         editedRoleProfile=editedRoleProfile
+                         editedRoleNodeCount=editedRoleNodeCount
+                         editedRoleParameters=editedRoleParameters
+                         saveRole='saveRole'}}
+  {{edit-global-service-config openModal=openModalEditGlobal
+                               globalPlanParameters=globalPlanParameters
+                               cancelGlobalServiceConfig='cancelGlobalServiceConfig'
+                               saveGlobalServiceConfig='saveGlobalServiceConfig'}}
+  {{loading-spinner show=showLoadingSpinner text=loadingSpinnerText}}
+{{/if}}

@@ -1,0 +1,111 @@
+{{#if errorMsg}}
+  <div class="row">
+    <div class='col-md-9'>
+      <div class='alert alert-danger rhci-alert'>
+        <i class="fa fa-2x fa-times-circle-o errorForValidation"></i>
+        &nbsp;
+        {{errorMsg}}
+      </div>
+    </div>
+  </div>
+{{else if showLoadingSpinner}}
+  <div class="spinner spinner-md spinner-inline"></div>
+  <span class='spinner-text'>
+    {{loadingSpinnerText}}
+  </span>
+{{/if}}
+
+<p>
+  Configure persistent storage for OpenShift internal Docker registry
+</p>
+
+<form class="form form-horizontal">
+
+  {{#base-f label="Storage Type" isRequired=true}}
+
+    {{#radio-button value="NFS" groupValue=model.openshift_storage_type id='nfs'
+                    disabled=isStarted dataQci="nfs-storage-type"}}
+      <span class="{{if isStarted 'disabled'}}">
+        NFS
+      </span>
+    {{/radio-button}}
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    {{#radio-button value="GFS" groupValue=model.openshift_storage_type id='gluster' dataQci="gluster-storage-type"}}
+      <span class="{{if isStarted 'disabled'}}">
+        Gluster
+      </span>
+    {{/radio-button}}
+  {{/base-f}}
+
+  {{text-f label="Host"
+    value=model.openshift_storage_host
+    isRequired=true cssId='openshift_storage_host'
+    disabled=isStarted
+    validator=storageHostValidator
+  }}
+
+  {{text-f label="Export Path"
+    value=model.openshift_export_path
+    isRequired=true cssId='openshift_export_path'
+    disabled=isStarted
+    validator=exportPathValidator
+  }}
+
+  <br />
+
+  <p>
+    Set the user account that will be created and used to configure all nodes.
+  </p>
+
+  {{text-f label="Username" value=model.openshift_username
+    isRequired=true cssId='openshift_username' disabled=isStarted
+    validator=usernameValidator
+  }}
+
+  {{text-f label="Password" type="password"
+    value=userPassword cssId="openshift_password" isRequired=true
+    placeholder="Must be 8 or more characters"
+    validator=passwordValidator
+  }}
+
+  {{text-f label="Confirm Password" type="password"
+    value=confirmUserPassword cssId="confirm_openshift_password" isRequired=true
+    placeholder="Must match user password"
+    validator=confirmUserPasswordValidator
+  }}
+
+  <br />
+
+  <p>
+    Set subdomain name for a wildcard entry to point to the OpenShift router.
+  </p>
+
+  {{text-f label="Subdomain"
+  value=model.openshift_subdomain_name isRequired=true cssId='openshift_subdomain_name'
+  disabled=isStarted validator=subdomainValidator
+  preText="*." postText=postTextDomainName}}
+
+  <br />
+
+  <p>
+    Select OpenShift sample applications
+  </p>
+
+  <div class="ose-sample-apps">
+    {{check-f label='Hello World'
+      checked=model.openshift_sample_helloworld
+      cssId='openshift_hello_world'
+      isRequired=false
+      helpText='A Hello World sample HTML application'}}
+  </div>
+
+</form>
+
+{{#cancel-back-next backRouteName='openshift.openshift-nodes'
+                   disableBack=false
+                   disableCancel=isStarted
+                   deploymentName=deploymentName}}
+  {{#button-f disabled=disableNextOpenshiftConfig action="testStorageMount"}}
+     Next <i class="fa fa-angle-right"></i>
+  {{/button-f}}
+{{/cancel-back-next}}

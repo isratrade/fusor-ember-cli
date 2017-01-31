@@ -1,0 +1,36 @@
+{{#if showTooltipDisableCheckbox}}
+<td class="disabled" data-toggle="tooltip" data-placement="top" data-container="body" title="Selected as Engine">
+  {{input type="checkbox" name="isSelectedAsHypervisor" checked=isSelectedAsHypervisor id=cssIdHostId data-qci=cssIdHostId disabled=isEngineOrStarted}}
+</td>
+{{/if}}
+
+{{#if hideTooltipDisableCheckbox}}
+<td class="disabled">
+  {{input type="checkbox" name="isSelectedAsHypervisor" checked=isSelectedAsHypervisor id=cssIdHostId data-qci=cssIdHostId disabled=isEngineOrStarted}}
+</td>
+{{/if}}
+
+{{#if hideTooltipEnableCheckbox}}
+<td>
+  {{input type="checkbox" name="isSelectedAsHypervisor" checked=isSelectedAsHypervisor id=cssIdHostId data-qci=cssIdHostId}}
+</td>
+{{/if}}
+
+<td class="{{if isSelectedAsHypervisor 'white-font' 'not-selected'}}">
+  {{#if isSelectedAsHypervisor}}
+    {{#if isFreeform}}
+      {{partial 'rhev-hostname-input'}}
+    {{else}}
+      <span class='text-lowercase'>{{host.name}}</span>
+    {{/if}}
+  {{else}}
+    <span class='text-lowercase'>{{host.name}}</span>
+  {{/if}}
+</td>
+<td> {{host.mac}} </td>
+<td class='text-center'> {{host-type-icon isVM=host.is_virtual isInverted=isSelectedAsHypervisor}} </td>
+<td class='text-center'> {{host.cpus}} CPU</td>
+<td class='text-center'> {{host.memory_human_size}}</td>
+<td class='text-center'> {{host.disk_count}} </td>
+<td class='text-center'> {{host.disks_human_size}} </td>
+<td> {{host.subnet_to_s}} </td>

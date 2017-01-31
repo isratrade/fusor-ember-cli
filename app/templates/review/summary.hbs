@@ -1,0 +1,99 @@
+
+<div class='row'>
+  <div class='col-md-12'>
+
+    {{#if isRhev}}
+      {{#accordion-item name=fullnameRhev isOpen=true}}
+
+        {{review-link label='URL'
+                      value=rhevEngineUrl
+                      isExternalURL=true}}
+
+        {{review-link label='Username' value='admin'}}
+
+      {{/accordion-item}}
+    {{/if}}
+
+    {{#if isOpenStack}}
+        {{#accordion-item name=fullnameOpenStack isOpen=isOpenStackOpen}}
+            {{review-link label='Undercloud username'
+                          value=undercloudUsername}}
+            {{review-link label='Undercloud password'
+                          value=undercloudPassword
+                          isPassword=true}}
+
+            {{review-link label='Overcloud URL'
+                          value=overcloudUrl
+                          isExternalURL=true}}
+            {{review-link label='Overcloud username'
+                          value=overcloudUsername}}
+            {{review-link label='Overcloud password'
+                          value=overcloudPassword
+                          isPassword=true}}
+        {{/accordion-item}}
+    {{/if}}
+
+    {{#if isOpenShift}}
+      {{#accordion-item name=fullnameOpenShift isOpen=isOpenShiftOpen}}
+        {{#each model.openshift_master_hosts as |masterHost|}}
+          {{ose-host-review-link oseHost=masterHost}}
+        {{/each}}
+
+        {{#each model.openshift_worker_hosts as |workerHost|}}
+          {{ose-host-review-link oseHost=workerHost}}
+        {{/each}}
+
+      {{#if model.openshift_sample_helloworld}}
+        {{review-link label='Example Application'
+                      value=exampleAppUrl
+                      isExternalURL=true}}
+      {{/if}}
+
+        {{review-link
+          label='WebUI Username '
+          value=model.openshift_username}}
+        {{review-link
+          label='WebUI Password'
+          value=model.openshift_user_password
+          isPassword=true}}
+      {{/accordion-item}}
+    {{/if}}
+
+    {{#if isCloudForms}}
+      {{#accordion-item name=fullnameCloudForms isOpen=true}}
+
+        {{review-link label='Primary Admin Console'
+                      value=primaryCfmeUrl
+                      isExternalURL=true}}
+
+        {{review-link label='Primary Self-Service Console'
+                      value=primaryCfmeUrlSelfService
+                      isExternalURL=true}}
+
+        {{#if multipleCfme}}
+          {{review-link label='Worker Admin Console'
+                        value=workerCfmeUrl
+                        isExternalURL=true}}
+
+          {{review-link label='Worker Self-Service Console'
+                        value=workerCfmeUrlSelfService
+                        isExternalURL=true}}
+        {{/if}}
+
+        {{review-link label='Username' value='admin'}}
+
+      {{/accordion-item}}
+    {{/if}}
+
+  </div>
+</div>
+
+{{#cancel-back-next backRouteName='review.progress.overview'
+                    disableBack=false
+
+                    disableCancel=true}}
+    {{#link-to 'deployments' role="button" class='btn btn-primary next-button'}}
+        View Deployments
+    {{/link-to}}
+{{/cancel-back-next}}
+

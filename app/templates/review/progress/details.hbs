@@ -1,0 +1,37 @@
+<br />
+{{#if isLoadingMoreTasks}}
+
+    <div class="spinner spinner-md spinner-inline"></div>
+    <span class='spinner-text'>
+      Loading Data from Tasks ...
+    </span>
+
+{{else}}
+
+    <div class="row">
+      <div class='col-md-9'>
+        <table class="table table-bordered small">
+          <thead>
+            <th>Action</th>
+            <th class='center'>State</th>
+            <th class='center'>Result</th>
+            <th class='center'>Progress</th>
+            <th class='center'>Started at</th>
+          </thead>
+          <tbody>
+              {{tr-task task=model.deployTask}}
+              {{tr-task task=model.manageContentTask}}
+              {{tr-task task=model.rhevTask}}
+              {{tr-task task=model.openstackTask}}
+              {{tr-task task=model.openshiftTask}}
+              {{tr-task task=model.cfmeTask}}
+              {{#each synctasks as |synctask|}}
+                  {{tr-task task=synctask}}
+              {{/each}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    {{outlet}}
+
+{{/if}}

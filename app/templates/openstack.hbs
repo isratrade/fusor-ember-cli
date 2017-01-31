@@ -1,0 +1,35 @@
+{{#wizard-step outlet=outlet}}
+
+      {{#link-to 'openstack.undercloud-deploy' tagName='li'}}
+        <a data-qci='detect-undercloud'>
+          <span class="hanging-indent">
+            {{stepNumberOpenstack}}A. Detect Undercloud
+          </span>
+        </a>
+      {{/link-to}}
+
+      {{#link-to 'openstack.register-nodes' tagName='li' disabled=disableTabRegisterNodes}}
+        <a data-qci='osp-register-nodes'>
+          <span class="hanging-indent">
+            {{stepNumberOpenstack}}B. Register Nodes
+          </span>
+        </a>
+      {{/link-to}}
+
+      {{#link-to 'openstack.assign-nodes' tagName='li' disabled=disableTabAssignNodes}}
+        <a data-qci='osp-assign-nodes'>
+          <span class="hanging-indent">
+            {{stepNumberOpenstack}}C. Assign Nodes
+          </span>
+        </a>
+      {{/link-to}}
+
+      {{#link-to 'openstack.overcloud' tagName='li' disabled=disableTabOvercloud}}
+        <a data-qci='configure-overcloud'>
+          <span class="hanging-indent">
+            {{stepNumberOpenstack}}D. Configure Overcloud
+          </span>
+        </a>
+      {{/link-to}}
+
+{{/wizard-step}}

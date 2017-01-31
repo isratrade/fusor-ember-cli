@@ -1,0 +1,58 @@
+<br />
+
+{{#if deployment.has_content_error}}
+  <div class="content-error-container">
+    {{#if loadingRedeployment}}
+      <h1 class="pre-err-header">Content Error Occurred</h1>
+      <div class="spinner spinner-md spinner-inline err-spinner"></div>
+    {{else}}
+      <h1>Content Error Occurred</h1>
+
+      {{#if katelloSyncErrorTasks}}
+        <div >The following repos failed to sync:</div>
+
+        {{#each katelloSyncErrorTasks as |ktask| }}
+          <a class="repo-link" href={{ktask.taskUrl}} target='_blank'>{{ktask.repository}}</a>
+        {{/each}}
+      {{/if}}
+
+      <div style="margin-top: 10px">
+        <button class="btn btn-default" {{action 'abandon'}}>Abandon</button>
+        <button class="btn btn-default" {{action 'abandonAndDelete'}}>Abandon and Delete</button>
+        <button class="btn btn-primary" {{action 'redeploy'}}>Redeploy</button>
+      </div>
+    {{/if}}
+  </div>
+{{else}}
+
+  {{
+    progress-bar-satellite
+    name=nameSatellite
+    isSatelliteProgressBar=true
+    manageContentTask=manageContentTask
+    configureHostGroupsTask=configureHostGroupsTask
+  }}
+
+  {{#if isRhev}}
+    {{progress-bar task=rhevTask name=nameRhev isSatelliteProgressBar=false}}
+  {{/if}}
+
+  {{#if isOpenStack}}
+    {{progress-bar task=openstackTask name=nameOpenStack isSatelliteProgressBar=false}}
+  {{/if}}
+
+  {{#if isOpenShift}}
+    {{progress-bar task=openshiftTask name=nameOpenShift isSatelliteProgressBar=false}}
+  {{/if}}
+
+  {{#if isCloudForms}}
+    {{progress-bar task=cfmeTask name=nameCloudForms isSatelliteProgressBar=false}}
+  {{/if}}
+
+  {{#if showDeployTaskProgressBar}}
+    {{progress-bar task=deployTask name='Total Deployment' isSatelliteProgressBar=false}}
+  {{/if}}
+
+{{/if}}
+
+{{abandon-deployment-modal openModal=openModal executeAbandonment='executeAbandonment'}}

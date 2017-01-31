@@ -1,0 +1,17 @@
+{{#pf-modal-base idModal='globalErrorModal'
+                 openModal=openModal
+                 title="Error Occurred"}}
+
+      {{#pf-modal-body}}
+
+          {{errorMessage}}
+
+      {{/pf-modal-body}}
+
+      {{#pf-modal-footer}}
+          <button {{action 'okay'}} class="btn btn-primary">
+              Okay
+          </button>
+      {{/pf-modal-footer}}
+
+{{/pf-modal-base}}

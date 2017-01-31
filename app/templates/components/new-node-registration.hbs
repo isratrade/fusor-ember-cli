@@ -1,0 +1,44 @@
+{{#pf-modal-base idModal="nodeRegistrationModal"
+                 cssClass="node-registration-modal"
+                 openModal=openModal
+                 title=newNodeTitle}}
+
+  {{#pf-modal-body}}
+    {{#if isStep1}}
+      {{partial "new-node-registration-step1-body"}}
+    {{else}}
+      {{partial "new-node-registration-step2-body"}}
+    {{/if}}
+  {{/pf-modal-body}}
+
+  {{#pf-modal-footer}}
+    {{#if isStep1}}
+      <button type="button" id="newNodeCancelButton" class="btn btn-default delete-node-cancel-button" {{action "cancelRegisterNodes"}}>
+        Cancel
+      </button>
+      {{#if isNewNodeMethodAuto}}
+        <button type="submit" id="detectNodeSubmitButton" class="btn btn-primary detect-node-submit-button"
+                disabled={{disableDetectNodesSubmit}} {{action "submitDetectNodes"}}>
+          Next <i class="fa fa-angle-right"></i>
+        </button>
+      {{else}}
+        <button type="submit" id="newNodeSubmitButton" class="btn btn-primary new-node-submit-button"
+                disabled={{disableNewNodesSubmit}} {{action "submitRegisterNodes"}}>
+          Register
+        </button>
+      {{/if}}
+    {{else}}
+      <button type="button" id="newNodeCancelButton" class="btn btn-default delete-node-cancel-button pull-left" {{action "cancelRegisterNodes"}}>
+        Cancel
+      </button>
+      <button type="button" id="newNodeBackButton" class="btn btn-default detect-node-back-button" {{action "backStep"}}>
+        <i class="fa fa-angle-left"></i> Back
+      </button>
+      <button type="submit" id="newNodeSubmitButton" class="btn btn-primary new-node-submit-button" disabled={{disableNewNodesSubmit}} {{action "submitRegisterNodes"}}>
+        Register
+      </button>
+    {{/if}}
+
+  {{/pf-modal-footer}}
+
+{{/pf-modal-base}}

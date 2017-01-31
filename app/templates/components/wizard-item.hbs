@@ -1,0 +1,7 @@
+{{#if isDisabled}}
+  {{num}}. {{name}}
+{{else}}
+  {{#link-to routeName data-qci=routeName}}
+    {{num}}. {{name}}
+  {{/link-to}}
+{{/if}}

@@ -1,0 +1,143 @@
+{{#if showAlertMessage}}
+<div class="row">
+  <div class='col-md-9'>
+    <div class='alert alert-success rhci-alert'>
+        <i class="fa fa-2x fa-check-circle-o green-circle"></i>
+        &nbsp;
+        {{selectedEnvironment.name}} added successfully.
+    </div>
+  </div>
+</div>
+{{/if}}
+
+<div class="row">
+  <div class='col-md-9'>
+    <p>
+      Select how this deployment's instances should receive updates.
+    </p>
+    <div class='ident-radio' data-qci ='immediately'>
+      {{#radio-button value="immediately" groupValue=envSetup changed="envSetupChanged" id='immediately' disabled=isStarted dataQci ='immediately'}}
+        <span class="{{if isStarted 'disabled'}}">
+          Immediately {{tool-tip faIcon='fa-info-circle blue-active'
+                                 title="Choosing to not use a lifecycle environment will result in a faster deployment time, but new content will become available to your deployment automatically.  If you use a lifecycle environment, then content needs to be manually published to that environment to be available."}}
+        </span>
+      {{/radio-button}}
+      <p class='lifecycle-option-help explanatory-text'>
+        Updates will be available to install in the deployment as soon as they are released.
+      </p>
+    </div>
+
+    <div class='ident-radio' data-qci ='after_publishing'>
+      {{#radio-button value="after_publishing" groupValue=envSetup changed="envSetupChanged" id='after_publishing' disabled=isStarted dataQci='after_publishing'}}
+      <span class="{{if isStarted 'disabled'}}">
+        After manually publishing them {{tool-tip faIcon='fa-info-circle blue-active'
+                   title="For updates to be available within a deployment, they must be published to the lifecycle environment that is assigned to that deployment."}}
+      </span>
+      {{/radio-button}}
+      <p class='lifecycle-option-help explanatory-text'>
+        Updates will only be available to install in the deployment after being manually published to the selected environment.
+      </p>
+    </div>
+
+  </div>
+</div>
+
+<br />
+
+{{#unless useDefaultOrgViewForEnv}}
+<div class="row">
+  <div class='col-md-9'>
+
+    {{#if hasNoEnvironments}}
+        <div class='alert alert-info rhci-alert'>
+          No lifecycle environments are in organization <strong>{{selectedOrganization.name}}</strong>
+        </div>
+    {{else}}
+        <div class="path-selector">
+          <ul class="path-list">
+            {{env-path-list-item env=libraryEnv
+                                 libraryEnv=libraryEnv
+                                 selectedEnvironment=selectedEnvironment
+                                 action="selectEnvironment"
+                                 disabled=isStarted
+                                 dataQci=libraryEnv.name
+                                 isSelectable=true}}
+            <li class="path-list-item">
+              <label class="path-list-item-label">
+                &nbsp;
+              </label>
+            </li>
+          </ul>
+        </div>
+      {{#each priorLibraryEnvironments as |env|}}
+        <div class="path-selector">
+          <ul class="path-list">
+            {{env-path-list-item env=libraryEnv
+                                 libraryEnv=libraryEnv
+                                 selectedEnvironment=selectedEnvironment
+                                 action="selectEnvironment"
+                                 disabled=isStarted
+                                 isSelectable=false}}
+            {{env-path-list-item env=env
+                                 libraryEnv=libraryEnv
+                                 selectedEnvironment=selectedEnvironment
+                                 action="selectEnvironment"
+                                 disabled=isStarted
+                                 dataQci=env.name
+                                 isSelectable=true}}
+            <li class="path-list-item">
+              <label class="path-list-item-label">
+                &nbsp;
+              </label>
+            </li>
+          </ul>
+        </div>
+      {{/each}}
+    {{/if}}
+
+    <div style='margin:15px 0px;'>
+      <button class="btn btn-default" {{action 'newEnvironment'}} disabled={{isStarted}}>
+        New Environment Path
+      </button>
+    </div>
+
+    {{error-message errorMsg=errorMsg}}
+
+  </div>
+</div>
+{{/unless}}
+
+<br />
+<br />
+
+
+{{new-environment-modal openModal=openModal
+                        showValidationError=showValidationError
+                        createEnvironment='createEnvironment'
+                        name=name
+                        envNameValidator=envNameValidator
+                        description=description}}
+
+{{#cancel-back-next backRouteName=satelliteTabRouteName
+                    disableBack=false
+                    disableCancel=isStarted
+                    deploymentName=deploymentName
+                    isNew=isNew}}
+    {{#if deployment.isNew}}
+      <button {{action 'saveDeployment' step1DRouteName}}
+              disabled={{disableNextOnLifecycleEnvironment}}
+              class='btn btn-primary next-button' data-qci='next-deployment-new.satellite.access-insights'>
+          {{#if deployment.isSaving}}
+            Loading ... <i class="fa fa-angle-right"></i>
+          {{else}}
+            Next <i class="fa fa-angle-right"></i>
+          {{/if}}
+      </button>
+    {{else}}
+      <button {{action 'saveDeployment' step1DRouteName}}
+              disabled={{disableNextOnLifecycleEnvironment}}
+              class='btn btn-primary next-button' data-qci='next-satellite.access-insights'>
+          Next <i class="fa fa-angle-right"></i>
+      </button>
+    {{/if}}
+{{/cancel-back-next}}

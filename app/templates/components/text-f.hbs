@@ -1,0 +1,29 @@
+{{#base-f label=label labelSize=labelSize inputSize=inputSize unitsSize=unitsSize unitsLabel=unitsLabel help-inline=help-inline errors=errors isRequired=isRequired hasError=hasError helpText=helpText}}
+
+  {{preText}}{{input class=cssFormClass
+                     value=value
+                     placeholder=placeholder
+                     type=typeInput
+                     key-down="showValidationErrorsKeyDown"
+                     focus-out="showValidationErrors"
+                     id=cssId
+                     data-qci=cssId
+                     disabled=disabled
+                     autocomplete='off'
+                     maxlength=inputLength}}{{postText}}
+
+  {{#if canShowPassword}}
+    <i {{action 'showPassword'}} class="fa {{eyeIcon}} eye-icon"></i>
+  {{/if}}
+
+  {{#if showValidationError}}
+    {{#each validationMessages as |message|}}
+      <p class="error errorForValidation">{{message}}</p>
+    {{/each}}
+
+    <p class="error errorForValidation">{{errors.name}}</p>
+  {{/if}}
+
+  {{yield}}
+
+{{/base-f}}

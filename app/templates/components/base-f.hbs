@@ -1,0 +1,32 @@
+<div class="clearfix">
+   <div class="form-group {{if hasError 'has-error'}}">
+
+      <label class="control-label {{labelClassSize}} {{class}}">
+        {{#if isRequired}}
+          <span class='errorForValidation'>*</span>
+        {{/if}}
+        {{label}}
+        {{#if showHelpPopover}}
+          <button {{action 'doNothing' bubbles=false}}
+                  class="pficon fa fa-info-circle rhci-popover-button"
+                  tabindex="-1"
+                  data-toggle="popover">
+          </button>
+        {{/if}}
+      </label>
+
+      <div class="{{inputClassSize}}">
+        {{yield}}
+      </div>
+
+      {{#if showUnits}}
+        <div class="{{unitsClassSize}}">
+          {{unitsLabel}}
+        </div>
+      {{/if}}
+
+      <div class={{helpClassSize}}>
+        {{help-inline}}
+      </div>
+   </div>
+</div>

@@ -1,0 +1,51 @@
+<div class="row">
+  <div class='col-md-9'>
+    <form class="form-horizontal" role="form">
+
+      {{text-f label="Name" value=model.name errors=errors cssId=idSatName
+               isRequired=true disabled=isStarted validator=deploymentNameValidator}}
+
+      {{textarea-f label="Description (Optional)" value=model.description cssId=idSatDesc disabled=isStarted }}
+
+      {{#base-f label="Universal Password"}}
+        <p>
+          Optionally enter a password that the installer will use to pre-populate values for:<br />
+          <ul class='common-password'>
+            {{#if isRhev}}
+              <li>RHV root and engine</li>
+            {{/if}}
+            {{#if isOpenStack}}
+              <li>RHOSP overcloud admin</li>
+            {{/if}}
+            {{#if isOpenShift}}
+              <li>OpenShift admin</li>
+            {{/if}}
+            {{#if isCloudForms}}
+              <li>CloudForms root, admin, and DB</li>
+            {{/if}}
+          </ul>
+        </p>
+      {{/base-f}}
+
+      {{text-f label="Password" type="password" value=commonPassword cssId="common-password"
+      disabled=isStarted validator=passwordValidator
+      labelSize='col-lg-offset-1 col-md-offset-2 col-lg-2 col-md-3 col-sm-5'
+      inputSize='col-lg-4 col-md-4 col-sm-7'
+      placeholder="Must be 8 or more characters"}}
+
+      {{text-f label="Confirm Password" type="password" value=confirmCommonPassword cssId="confirm-common-password"
+      disabled=isStarted validator=confirmCommonPasswordValidator
+      labelSize='col-lg-offset-1 col-md-offset-2 col-lg-2 col-md-3 col-sm-5'
+      inputSize='col-lg-4 col-md-4 col-sm-7'
+      placeholder="Must match universal password"}}
+
+    </form>
+  </div>
+</div>
+{{cancel-back-next backRouteName=backRouteNameOnSatIndex
+                   disableBack=false
+                   nextRouteName=lifecycleEnvironmentTabRouteName
+                   disableNext=disableNextOnDeploymentName
+                   disableCancel=isStarted
+                   deploymentName=deploymentName
+                   isNew=isNew}}

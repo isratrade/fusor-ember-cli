@@ -1,0 +1,36 @@
+{{#unless isNodeProgressBar}}
+ <div class='col-lg-2 col-md-2 col-sm-3 rhci-review-product-name'>
+  <h3>{{name}}</h3>
+</div>
+{{/unless}}
+<div class='col-lg-8 col-md-7 col-sm-6'>
+  <div class='progress-bar-label'>
+    {{#if isFinished}}
+      <i class="fa fa-check-circle-o green-circle"></i>&nbsp;
+    {{else if isError}}
+      <i class="fa fa-exclamation-triangle errorForValidation"></i>&nbsp;
+    {{else if isStopped}}
+      <i class="fa fa-exclamation-triangle warningForValidation"></i>&nbsp;
+    {{else if isStarted}}
+      <div class="spinner spinner-xs spinner-inline"></div>
+    {{/if}}
+
+    {{progressBarMsg}}
+
+    {{#if hasHumanizedErrors}}
+      <span class='errorForValidation'>
+          {{#link-to 'review.progress.details'}}{{manageContentTask.humanized_errors}}{{/link-to}}
+          {{{hostErrorInfo}}}
+      </span>
+    {{/if}}
+
+    <div class='pull-right'>
+      {{percentProgress}}%
+    </div>
+  </div>
+
+  <div class="progress">
+    <div class={{progressBarClass}} role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow={{percentProgressInt}} style={{styleWidth}}>
+    </div>
+  </div>
+</div>

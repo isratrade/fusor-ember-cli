@@ -1,0 +1,66 @@
+{{#if useExistingManifest}}
+  <div class="row">
+    <div class='col-md-9'>
+      <div class='alert alert-info rhci-alert'>
+          This organization already has a subscription management application <strong>{{upstreamConsumerName}}</strong> assigned to it.
+      </div>
+    </div>
+  </div>
+{{/if}}
+
+{{#unless sufficientEntitlements}}
+  <div class="row">
+    <div class='col-md-9'>
+      <div class='alert alert-warning rhci-alert'>
+          <i class="fa fa-2x fa-exclamation-triangle warningForValidation validation-alert-icon"></i>
+          <ul class="validation-alert-message">
+            We've detected the subscription manifest supplied for this deployment may not have sufficient entitlements
+            to cover the requested products.
+          </ul>
+      </div>
+    </div>
+  </div>
+{{/unless}}
+
+<div class="row">
+  <div class='col-md-9'>
+
+    <table class="table table-bordered small">
+      <thead>
+        <tr>
+          <th> Subscription Name </th>
+          <th> Contract Number </th>
+          <th class="text-center"> Start Date </th>
+          <th class="text-center"> End Date </th>
+          <th class="text-center"> Quantity Attached </th>
+          {{#unless useExistingManifest}}
+            <th class="text-center"> Total Quantity </th>
+          {{/unless}}
+        </tr>
+        </thead>
+
+      <tbody>
+      {{#each sortedModel as |subscription|}}
+          {{tr-subscription-manifest subscription=subscription isDisconnected=isDisconnected useExistingManifest=useExistingManifest}}
+      {{else}}
+        <tr>
+          <td colspan="8">
+            <p class='no_subscriptions'>
+              <h3> No subscriptions found </h3>
+            </p>
+          </td>
+        </tr>
+      {{/each}}
+
+      </tbody>
+    </table>
+
+  </div>
+</div>
+
+{{cancel-back-next backRouteName=backRouteNameReviewSubs
+                   disableBack=false
+                   nextRouteName='review'
+                   disableNext=false
+                   disableCancel=isStarted
+                   deploymentName=deploymentName}}

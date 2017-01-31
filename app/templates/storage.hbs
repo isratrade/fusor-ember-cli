@@ -1,0 +1,82 @@
+{{#if errorMsg}}
+  <div class="row">
+    <div class='col-md-9'>
+      <div class='alert alert-danger rhci-alert'>
+        <i class="fa fa-2x fa-times-circle-o errorForValidation"></i>
+        &nbsp;
+        {{errorMsg}}
+      </div>
+    </div>
+  </div>
+{{else if storageNotEmptyError}}
+  <div class="row">
+    <div class='col-md-9'>
+      <div class='alert alert-danger rhci-alert'>
+        <i class="fa fa-2x fa-times-circle-o errorForValidation"></i>
+        &nbsp;
+        {{storageNotEmptyError}}
+      </div>
+    </div>
+  </div>
+{{else if showLoadingSpinner}}
+  <div class="spinner spinner-md spinner-inline"></div>
+  <span class='spinner-text'>
+    {{loadingSpinnerText}}
+  </span>
+{{/if}}
+
+{{#if isCloudForms}}
+  <h4> Data Domain </h4>
+{{/if}}
+
+<form class="form form-horizontal">
+
+  {{#base-f label="Storage Type" isRequired=true}}
+
+    {{#radio-button value="NFS" groupValue=model.rhev_storage_type id='nfs'
+                    disabled=isStarted}}
+      <span class="{{if isStarted 'disabled'}}">
+        NFS
+      </span>
+    {{/radio-button}}
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    {{#radio-button value="glusterfs" groupValue=model.rhev_storage_type id='gluster' disabled=deploymentController.isStarted}}
+      <span class="{{if deploymentController.isStarted 'disabled'}}">
+        Gluster
+      </span>
+    {{/radio-button}}
+  {{/base-f}}
+
+  {{#if isLocal}}
+    {{text-f label="Storage Path" value=model.rhev_local_storage_path placeholder='Ex. /rhev/data_storage' isRequired=true cssId='rhev_local_storage_path' help-inline='This path will be created and given appropriate permissions - chown 36:36; chmod 0755, etc' disabled=isStarted}}
+  {{else}}
+    {{text-f label="Data Domain Name" value=model.rhev_storage_name maxlength=50 isRequired=true cssId='rhev_storage_name' disabled=isStarted validator=storageNameValidator}}
+    {{text-f label="Storage Address" value=model.rhev_storage_address isRequired=true cssId='rhev_storage_address' disabled=isStarted validator=hostnameValidator}}
+    {{text-f label="Share Path" value=model.rhev_share_path isRequired=true cssId='rhev_share_path' disabled=isStarted validator=rhvPathValidator}}
+
+    {{#if isCloudForms}}
+      <h4> Export Domain </h4>
+        {{text-f label="Export Domain Name" value=model.rhev_export_domain_name maxlength=50 cssId='rhev_export_domain_name' isRequired=true disabled=deploymentController.isStarted validator=storageNameValidator}}
+        {{text-f label="Storage Address" value=model.rhev_export_domain_address cssId='rhev_export_domain_address' isRequired=true disabled=deploymentController.isStarted validator=hostnameValidator}}
+        {{text-f label="Share Path" value=model.rhev_export_domain_path cssId='rhev_export_domain_path' isRequired=true disabled=deploymentController.isStarted validator=exportPathValidator}}
+    {{/if}}
+
+    {{#if rhevIsSelfHosted}}
+      <h4> Self-hosted RHV Engine Storage Domain </h4>
+        {{text-f label="Hosted Engine Storage Domain Name" value=model.hosted_storage_name maxlength=50 cssId='hosted_storage_name' isRequired=true disabled=deploymentController.isStarted validator=storageNameValidator}}
+        {{text-f label="Storage Address" value=model.hosted_storage_address cssId='hosted_storage_address' isRequired=true disabled=deploymentController.isStarted validator=hostnameValidator}}
+        {{text-f label="Share Path" value=model.hosted_storage_path cssId='hosted_storage_path' isRequired=true disabled=deploymentController.isStarted validator=hostedPathValidator}}
+    {{/if}}
+  {{/if}}
+
+
+</form>
+
+{{#cancel-back-next backRouteName='rhev-options'
+                   disableBack=false
+                   disableCancel=isStarted
+                   deploymentName=deploymentName}}
+   {{#button-f disabled=disableNextStorage action="testMountPoint"}}
+       Next <i class="fa fa-angle-right"></i>
+   {{/button-f}}
+{{/cancel-back-next}}

@@ -1,0 +1,24 @@
+{{#if isHypervisorOrStarted}}
+<td class="disabled" data-toggle="tooltip" data-placement="top" data-container="body" title="Selected as Hypervisor">
+  {{radio-button value=host groupValue=selectedRhevEngineHost changed="engineHostChanged" id=cssIdHostId dataQci=cssIdHostId disabled=isHypervisorOrStarted}}
+</td>
+{{else}}
+<td>
+  {{radio-button value=host groupValue=selectedRhevEngineHost changed="engineHostChanged" id=cssIdHostId dataQci=cssIdHostId disabled=isHypervisorOrStarted}}
+</td>
+{{/if}}
+
+<td class="{{if isSelectedAsEngine 'white-font' 'not-selected'}} {{if isHypervisor 'disabled'}}">
+    {{#if isSelectedAndNotStarted }}
+      {{partial 'rhev-hostname-input'}}
+    {{else}}
+      <span class='text-lowercase'>{{host.name}}</span>
+    {{/if}}
+</td>
+<td> {{host.mac}} </td>
+<td class='text-center'> {{host-type-icon isVM=host.is_virtual isInverted=isSelectedAsEngine}} </td>
+<td class='text-center'> {{host.cpus}} CPU</td>
+<td class='text-center'> {{host.memory_human_size}}</td>
+<td class='text-center'> {{host.disk_count}} </td>
+<td class='text-center'> {{host.disks_human_size}} </td>
+<td> {{host.subnet_to_s}} </td>

@@ -1,0 +1,193 @@
+{{#if isHaNestedVirt}}
+  <div class="row">
+    <div class='col-md-9'>
+      <div class='alert alert-warning rhci-alert'>
+        <i class="fa fa-2x fa-exclamation-triangle warningForValidation"></i>
+        &nbsp;
+        Virtual machine hypervisor detected.
+        Highly available deployments are not supported on nested virtualization configurations and the deployment may fail.
+      </div>
+    </div>
+  </div>
+{{/if}}
+
+{{#if isError}}
+  <div class="row">
+    <div class='col-md-9'>
+      <div class='alert alert-danger rhci-alert'>
+        <i class="fa fa-2x fa-times-circle-o errorForValidation"></i>
+        &nbsp;
+        {{errorTypes}} is overcommitted. Consider lowering node counts or {{errorTypes}} sizes.
+      </div>
+    </div>
+  </div>
+
+  {{#if isOverCapacityVcpu}}
+    <div class="row">
+      <div class='col-md-9'>
+        <div class='alert alert-danger rhci-alert'>
+          <p>
+            Current Configuration Requirements
+            {{#if isCloudForms}}
+              {{tool-tip  faIcon='fa-info-circle' title=cfmeTooltipError.cpu}}
+            {{/if}}
+          </p>
+          <p>Master vCPUs: {{totalMasterCpus}}</p>
+          <p>Worker vCPUs: {{totalWorkerCpus}}</p>
+          {{#if isHA}}
+            <p>Required HA vCPUs: {{totalInfraCpus}}</p>
+          {{/if}}
+          <p><strong>Total vCPUs required: {{vcpuNeeded}}</strong></p>
+          <p><strong>Total vCPUs available: {{vcpuAvailable}}</strong></p>
+        </div>
+      </div>
+    </div>
+  {{/if}}
+
+  {{#if isOverCapacityRam}}
+    <div class="row">
+      <div class='col-md-9'>
+        <div class='alert alert-danger rhci-alert'>
+          <p>
+            Current Configuration Requirements
+            {{#if isCloudForms}}
+              {{tool-tip  faIcon='fa-info-circle' title=cfmeTooltipError.ram}}
+            {{/if}}
+          </p>
+          <p>Master RAM: {{totalMasterRam}} GB</p>
+          <p>Worker RAM: {{totalWorkerRam}} GB</p>
+          {{#if isHA}}
+            <p>Required HA RAM: {{totalInfraRam}} GB</p>
+          {{/if}}
+          <p><strong>Total RAM required: {{ramNeeded}} GB</strong></p>
+          <p><strong>Total RAM available: {{ramAvailable}} GB</strong></p>
+        </div>
+      </div>
+    </div>
+  {{/if}}
+
+  {{#if isOverCapacityDisk}}
+    <div class="row">
+      <div class='col-md-9'>
+        <div class='alert alert-danger rhci-alert'>
+          <p>
+            Current Configuration Requirements
+            {{#if isCloudForms}}
+              {{tool-tip  faIcon='fa-info-circle' title=cfmeTooltipError.disk}}
+            {{/if}}
+          </p>
+          <p>Master Disk: {{totalMasterDiskPlusStorage}} GB</p>
+          <p>Worker Disk + Storage: {{totalWorkerDiskPlusStorage}} GB</p>
+          {{#if isHA}}
+            <p>Required HA Disk: {{totalInfraDiskPlusStorage}} GB</p>
+          {{/if}}
+          <p><strong>Total Disk required: {{diskNeeded}} GB</strong></p>
+          <p><strong>Total Disk available: {{diskAvailable}} GB</strong></p>
+        </div>
+      </div>
+    </div>
+  {{/if}}
+{{/if}}
+
+<div class="ose-select-dest-provider">
+  <p>
+    Select where to provision the OpenShift Container Platform nodes.
+  </p>
+
+  <div class='ident-radio'>
+    {{#radio-button value="RHEV" groupValue=openshiftInstallLoc changed="oseLocationChanged" id="install_on_rhev" disabled=disableRHEVradio dataQci="rhevOspInstallLoc"}}
+      <span class="{{if disableRHEV 'disabled'}}">
+        {{fullnameRhev}}
+      </span>
+    {{/radio-button}}
+  </div>
+</div>
+
+{{!--
+------------------------------------------------------------
+TODO: Should allow for more product selection when more than one provider is supported post GA
+------------------------------------------------------------
+<div class='ident-radio'>
+  {{#radio-button value="OpenStack" groupValue=openshiftInstallLoc changed="oseLocationChanged" id="install_on_openstack" disabled=disableOpenstackradio dataQci="openstackOspInstallLoc"}}
+    <span class="inline-block {{if disableOpenStack 'disabled'}}">
+      {{fullnameOpenStack}}
+    </span>
+  {{/radio-button}}
+</div>
+--}}
+
+{{#if openshiftInstallLoc}}
+  <p>
+    Select how many nodes should be created for the OpenShift environment.
+    {{tool-tip faIcon='fa-info-circle'
+               title="Single Master environments must have a master node and at least one worker node. Highly Available environments need at least three master nodes, at least one worker node, and require four additional nodes for routing and load distribution."}}
+
+  </p>
+{{/if}}
+
+{{#if openshiftInstallLoc}}
+  {{ose-env-summary positiveIntegerValidator=positiveIntegerValidator
+                    oseDeploymentType=oseDeploymentType
+                    numTotalNodes=numTotalNodes
+                    storageSize=storageSize
+                    vcpuNeeded=vcpuNeeded
+                    ramNeeded=ramNeeded
+                    diskNeeded=diskNeeded
+                    vcpuAvailable=vcpuAvailable
+                    ramAvailable=ramAvailable
+                    diskAvailable=diskAvailable
+                    isCloudForms=isCloudForms
+                    substractCfme=substractCfme
+                    cfmeDisk=cfmeDisk
+                    cfmeRam=cfmeRam
+                    cfmeVcpu=cfmeVcpu}}
+
+  {{#if oseDeploymentType}}
+  <div class="row ose-node-details-container">
+    {{ose-node-details  title="Configurable Nodes"
+                        editable=true
+                        oseDeploymentType=oseDeploymentType
+                        numTotalNodes=numTotalNodes
+                        numLeftNodes=numMasterNodes
+                        nodeRatioOptions=nodeRatioOptions
+                        numRightNodes=numWorkerNodes
+                        validator=positiveIntegerValidator
+                        leftTypeNode="Master nodes"
+                        leftVcpu=masterVcpu
+                        leftRam=masterRam
+                        leftDisk=masterDisk
+                        leftDiskImages=masterDiskImages
+                        leftStorageSize=storageSize
+                        rightTypeNode="Worker nodes"
+                        rightVcpu=workerVcpu
+                        rightRam=workerRam
+                        rightDisk=workerDisk
+                        rightStorageSize=storageSize
+                        nodeRatioChanged='nodeRatioChanged'}}
+
+    {{#if haSelected}}
+      {{ose-node-details  title="Required HA Nodes"
+                          editable=false
+                          numLeftNodes=numHaLoadBalancers
+                          numRightNodes=numHaInfraNodes
+                          validator=positiveIntegerValidator
+                          leftTypeNode=haLoadBalancerResources.type
+                          leftVcpu=haLoadBalancerResources.vCPU
+                          leftRam=haLoadBalancerResources.ram
+                          leftDisk=haLoadBalancerResources.disk
+                          rightTypeNode=haInfraNodesResources.type
+                          rightVcpu=haInfraNodesResources.vCPU
+                          rightRam=haInfraNodesResources.ram
+                          rightDisk=workerDisk
+                          rightStorageSize=storageSize}}
+    {{/if}}
+  </div>
+  {{/if}}
+{{/if}}
+
+{{cancel-back-next backRouteName=backRouteName
+                   disableBack=false
+                   nextRouteName='openshift.openshift-configuration'
+                   disableNext=isInvalidOpenshiftNodes
+                   disableCancel=isStarted
+                   deploymentName=deploymentName}}

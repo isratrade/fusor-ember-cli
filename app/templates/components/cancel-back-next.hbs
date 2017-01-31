@@ -1,0 +1,12 @@
+{{#if bottomBar}}
+  <div class="col-xs-8 col-sm-8 col-md-9 col-lg-10 col-xs-push-4 col-sm-push-4 col-md-push-3 col-lg-push-2 sidebar-pf-right rhci-steps-buttons cancel-back-next">
+    {{partial 'components/cancel-back-next-buttons'}}
+  </div>
+{{else}}
+  {{partial 'components/cancel-back-next-buttons'}}
+{{/if}}
+
+{{cancel-deployment-modal openModal=openModal
+                          deploymentName=deploymentName
+                          cancelAndRollbackNewDeployment='cancelAndRollbackNewDeployment'
+                          openCancelDeploymentModal='openCancelDeploymentModal'}}

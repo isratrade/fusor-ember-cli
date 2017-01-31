@@ -1,0 +1,25 @@
+<td>
+  {{input type="checkbox" name="isSelectedSubscription" checked=subscription.isSelectedSubscription data-qci=subCssId}}
+</td>
+<td> {{subscription.productName}} </td>
+<td> {{subscription.contractNumber}} </td>
+<td> {{systemType}} </td>
+<td> {{moment-format subscription.startDate 'll'}} </td>
+<td> {{moment-format subscription.endDate 'll'}} </td>
+<td class='text-center'> {{subscription.qtyAttached}} </td>
+<td class='text-center'> {{subscription.qtyAvailableOfTotal}}</td>
+<td class="text-center {{if subscription.isSelectedSubscription 'black-font' 'not-selected'}}">
+  {{#if subscription.isSelectedSubscription}}
+     {{input type="input" name='qtyToAttach'
+                          value=subscription.qtyToAttach
+                          size=5
+                          maxlength=5
+                          class=qtyToAttachClass
+                          data-qci=attachCssId
+                          disabled=disableQty
+                          focus-out="setValidQty"
+                          }}
+  {{else}}
+    Not Selected
+  {{/if}}
+</td>

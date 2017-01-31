@@ -1,0 +1,29 @@
+{{#if readOnly}}
+  {{#if hasAssignedNodes}}
+    <div style="padding-left: 15px;">
+      {{role.count}} {{role.name}}
+      {{#if multipleAssignedNodes}}Nodes{{else}}Node{{/if}}
+    </div>
+  {{/if}}
+{{else}}
+    <li class="role role-{{role.roleType}} {{assignedClass}}">
+    <div class="deployment-role-label">
+        {{role.label}}
+    </div>
+    {{#if roleAssigned}}
+      {{#x-select value=role.count disabled=disabled data-qci=role.roleType}}
+        {{#each availableOptions as |opt| }}
+          {{#x-option value=opt}}{{opt}}{{/x-option}}
+        {{/each}}
+      {{/x-select}}
+    {{/if}}
+    {{#unless disabled}}
+      <a data-qci='removeRole' class="role-option delete">
+          <i class="fa fa-times" {{action "removeRole"}}></i>
+      </a>
+      <a data-qci='editRole' class="role-option edit" >
+          <i class="fa fa-pencil" {{action "editRole"}}></i>
+      </a>
+    {{/unless}}
+</li>
+{{/if}}

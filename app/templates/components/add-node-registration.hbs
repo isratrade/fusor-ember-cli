@@ -1,0 +1,74 @@
+{{#pf-modal-base idModal='addNodeModal'
+                 openModal=openModal
+                 title=addNodeTitle}}
+
+
+  {{#pf-modal-body}}
+    <div class="row">
+      <div class="col-xs-12">
+        <p>Enter information for additional nodes that should be registered to {{nodeInfo.address}}</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12">
+        <form class="form-horizontal add-node-form">
+          {{#base-f label="IP Address"
+                    labelSize='col-xs-3'
+                    inputSize='col-xs-4'}}
+            <div class="add-node-uneditable-input-container"><span>{{nodeInfo.address}}</span></div>
+          {{/base-f}}
+
+          {{#base-f label="Driver"
+                    labelSize='col-xs-3'
+                    inputSize='col-xs-4'}}
+            <div class="add-node-uneditable-input-container"><span>{{nodeDriverHumanized}}</span></div>
+          {{/base-f}}
+
+          {{#base-f label=newNodeUsernameLabel
+                    labelSize='col-xs-3'
+                    inputSize='col-xs-4'}}
+            <div class="add-node-uneditable-input-container"><span>{{nodeInfo.username}}</span></div>
+          {{/base-f}}
+
+          {{text-f  cssId="addNodePasswordInput"
+                    label=newNodePasswordLabel
+                    type='password'
+                    labelSize='form-label-nowrap col-xs-3'
+                    inputSize='col-xs-4'
+                    value=nodeInfo.password
+                    resetErrorsMessageKey=resetErrorsMessageKey
+                    isRequired=true}}
+
+          <div class="row">
+            <div class="col-xs-9 add-node-textarea-instruction">
+              <p>One or more nodes of the above IP address can be specified by supplying
+                their MAC address(es), <strong>one address per line</strong>.</p>
+            </div>
+          </div>
+          {{textarea-f-alt2 cssId="addNodeMacAddressInput"
+                            label="MAC address(es)"
+                            value=manualMacAddresses
+                            validator=manualMacAddressesValidator
+                            resetErrorsMessageKey=resetErrorsMessageKey
+                            labelContainerClass="col-xs-3"
+                            inputContainerClass="col-xs-4"
+                            errorContainerClass="col-xs-5"
+                            rows=3
+                            spellcheck=false}}
+        </form>
+      </div>
+    </div>
+  {{/pf-modal-body}}
+
+  {{#pf-modal-footer}}
+    <button type="button" id="addNodeCancelButton"
+            class="btn btn-default delete-node-cancel-button" {{action "cancelAddNodes"}}>
+      Cancel
+    </button>
+    <button type="submit" id="addNodeSubmitButton" class="btn btn-primary new-node-submit-button"
+            disabled={{disableNewNodesSubmit}} {{action "submitAddNodes"}}>
+      Register
+    </button>
+  {{/pf-modal-footer}}
+
+{{/pf-modal-base}}

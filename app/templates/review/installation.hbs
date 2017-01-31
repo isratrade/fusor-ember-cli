@@ -1,0 +1,382 @@
+{{#unless showSpinner}}
+
+  {{#if showErrorMessage}}
+    <div class="row">
+      <div class='col-md-9'>
+        <div class='alert alert-danger rhci-alert'>
+          <i class="fa fa-2x fa-exclamation-triangle errorForValidation"></i>
+          &nbsp;
+          {{errorMsg}}
+        </div>
+      </div>
+    </div>
+  {{/if}}
+
+  {{#if showValidationErrors}}
+    <div class="row">
+      <div class='col-md-9'>
+        <div class='alert alert-danger rhci-alert'>
+          <i class="fa fa-2x fa-times-circle-o errorForValidation validation-alert-icon"></i>
+          <ul class="validation-alert-message">
+            {{#each validationErrors as |errorMsg|}}
+              <li>{{errorMsg}}</li>
+            {{/each}}
+          </ul>
+        </div>
+      </div>
+    </div>
+  {{/if}}
+
+  {{#if showValidationWarnings}}
+    <div class="row">
+      <div class='col-md-9'>
+        <div class='alert alert-warning rhci-alert'>
+            <i class="fa fa-2x fa-exclamation-triangle warningForValidation validation-alert-icon"></i>
+            <ul class="validation-alert-message">
+              {{#each validationWarnings as |warningMsg|}}
+                <li>{{warningMsg}}</li>
+              {{/each}}
+            </ul>
+        </div>
+      </div>
+    </div>
+  {{/if}}
+
+  <div class='row'>
+    <div class='col-md-12'>
+
+      {{#accordion-item name=fullnameSatellite isOpen=true}}
+        {{review-link label='Name' routeName='satellite' isRequired=true
+                      value=model.name}}
+
+        {{review-link label='Organization' isRequired=true
+                      value=model.organization.name}}
+
+        {{review-link label='Environment' routeName='configure-environment'
+                      value=lifecycleEnvironmentName}}
+
+        {{review-link label='Red Hat Insights'
+                      routeName='satellite.access-insights'
+                      value=deploymentController.enableAccessInsights }}
+
+      {{/accordion-item}}
+
+    {{#if isRhev}}
+      {{#accordion-item name=fullnameRhev isOpen=isRhevOpen}}
+
+        {{review-link label='Setup Type' routeName='rhev-setup' isRequired=true
+                          value=rhevSetupController.rhevSetupTitle}}
+        {{#if isSelfHosted}}
+            {{#review-link label='Engine/Hypervisor Host Name' routeName='hypervisor.discovered-host' isRequired=true value=selectedHypervisorHosts useYieldInstead=true}}
+                {{#each selectedHypervisorHosts as |host|}}
+                   {{hypervisor-name host=host hypervisorDomain=hypervisorDomain}}
+                {{/each}}
+            {{/review-link}}
+
+        {{else}}
+            {{review-link label='Engine Host Name' routeName='engine.discovered-host' isRequired=true
+                          value=engineNamePlusDomain}}
+
+            {{#review-link label='Hypervisor Host Name' routeName='hypervisor.discovered-host' isRequired=true value=selectedHypervisorHosts useYieldInstead=true}}
+                {{#each selectedHypervisorHosts as |host|}}
+                   {{hypervisor-name host=host hypervisorDomain=hypervisorDomain}}
+                {{/each}}
+            {{/review-link}}
+        {{/if}}
+
+        {{review-link label='Root password Engine & Hypervisor' routeName='rhev-options' isRequired=true
+                      isPassword=true value=model.rhev_root_password }}
+
+        {{review-link label='Engine admin password' routeName='rhev-options' isRequired=true isPassword=true
+                      value=model.rhev_engine_admin_password }}
+
+        {{review-link label='Datacenter Name' routeName='rhev-options' isDefault=true
+                      value=model.rhev_data_center_name}}
+
+        {{review-link label='Cluster Name' routeName='rhev-options' isDefault=true
+                      value=model.rhev_cluster_name}}
+
+        {{review-link label='CPU Type' routeName='rhev-options' isDefault=true
+                      value=model.rhev_cpu_type}}
+
+        {{review-link label='Storage Type' routeName='storage' isRequired=true
+                      value=model.rhev_storage_type}}
+
+        {{review-link label='Data Domain Name' routeName='storage' isRequired=true
+                      value=model.rhev_storage_name}}
+
+        {{review-link label='Data Storage Address' routeName='storage' isRequired=true
+                      value=model.rhev_storage_address}}
+
+        {{review-link label='Data Storage Path' routeName='storage' isRequired=true
+                      value=model.rhev_share_path}}
+
+        {{#if isCloudForms}}
+
+            {{review-link label='Export Domain Name' routeName='storage' isRequired=true
+                          value=model.rhev_export_domain_name}}
+
+            {{review-link label='Export Storage Address' routeName='storage' isRequired=true
+                          value=model.rhev_export_domain_address}}
+
+            {{review-link label='Export Storage Path' routeName='storage' isRequired=true
+                          value=model.rhev_export_domain_path}}
+
+        {{/if}}
+        {{#if isSelfHosted}}
+
+            {{review-link label='Hosted Storage Domain Name' routeName='storage' isRequired=true
+                          value=model.hosted_storage_name}}
+
+            {{review-link label='Hosted Storage Address' routeName='storage' isRequired=true
+                          value=model.hosted_storage_address}}
+
+            {{review-link label='Hosted Storage Path' routeName='storage' isRequired=true
+                          value=model.hosted_storage_path}}
+
+        {{/if}}
+
+        <br />
+      {{/accordion-item}}
+    {{/if}}
+
+    {{#if isOpenStack}}
+      {{#accordion-item name=fullnameOpenStack isOpen=isOpenStackOpen}}
+            {{review-link label='Undercloud username' value='admin' isRequired=true}}
+            {{review-link label='Undercloud password' value=model.openstack_deployment.undercloud_admin_password isPassword=true isRequired=true}}
+            {{#review-link label='Assigned Nodes' routeName='openstack.assign-nodes' isRequired=true
+                  value=profiles  useYieldInstead=true}}
+              {{#each profiles as |profile|}}
+                <div>{{profile.flavor}}:</div>
+                {{#each profile.nodes as |node|}}
+                  <div class="node-count-review-link">{{node.count}} {{node.name}} Nodes</div>
+                {{/each}}
+              {{/each}}
+            {{/review-link}}
+            {{review-link label='External Network Interface'
+                          value=model.openstack_deployment.overcloud_ext_net_interface
+                          isRequired=true
+                          routeName='openstack.overcloud'}}
+            {{review-link label='Private Network'
+                          value=model.openstack_deployment.overcloud_private_net
+                          isRequired=true
+                          routeName='openstack.overcloud'}}
+            {{review-link label='Floating IP Network'
+                          value=model.openstack_deployment.overcloud_float_net
+                          isRequired=true
+                          routeName='openstack.overcloud'}}
+            {{review-link label='Floating IP Network Gateway'
+                          value=model.openstack_deployment.overcloud_float_gateway
+                          isRequired=true
+                          routeName='openstack.overcloud'}}
+            {{review-link label='Overcloud Admin Password'
+                          value=model.openstack_deployment.overcloud_password
+                          isPassword=true
+                          isRequired=true
+                          routeName='openstack.overcloud'}}
+            {{review-link label='Ceph Storage'
+                          value=model.openstack_deployment.cephStorageStatus
+                          routeName='openstack.overcloud'}}
+
+
+        {{#if model.openstack_deployment.external_ceph_storage}}
+          {{review-link label="Ceph External Mon Host"
+                        value=model.openstack_deployment.ceph_ext_mon_host
+                        isRequired=true
+                        routeName='openstack.overcloud'}}
+
+
+          {{review-link label="Ceph Cluster FSID"
+                        value=model.openstack_deployment.ceph_cluster_fsid
+                        isRequired=true
+                        routeName='openstack.overcloud'}}
+
+
+          {{review-link label="Ceph Client Username"
+                        value=model.openstack_deployment.ceph_client_username
+                        isRequired=true
+                        routeName='openstack.overcloud'}}
+
+
+          {{review-link label="Ceph Client Key"
+                        value=model.openstack_deployment.ceph_client_key
+                        isRequired=true
+                        routeName='openstack.overcloud'}}
+
+
+          {{review-link label="Nova Rbd Pool Name"
+                        value=model.openstack_deployment.nova_rbd_pool_name
+                        isRequired=true
+                        routeName='openstack.overcloud'}}
+
+
+          {{review-link label="Cinder Rbd Pool Name"
+                        value=model.openstack_deployment.cinder_rbd_pool_name
+                        isRequired=true
+                        routeName='openstack.overcloud'}}
+
+
+          {{review-link label="Glance Rbd Pool Name"
+                        value=model.openstack_deployment.glance_rbd_pool_name
+                        isRequired=true
+                        routeName='openstack.overcloud'}}
+
+        {{/if}}
+      {{/accordion-item}}
+    {{/if}}
+
+    {{#if isOpenShift}}
+      {{#accordion-item name=fullnameOpenShift isOpen=isOpenshiftOpen}}
+
+        {{review-link label='Nodes Location'
+                      routeName='openshift.openshift-nodes'
+                      isRequired=true
+                      value=openshiftInstallLoc}}
+
+        {{review-link label='# of Master Nodes'
+                      routeName='openshift.openshift-nodes'
+                      isRequired=true
+                      value=model.openshift_number_master_nodes}}
+
+        {{review-link label='# of Worker Nodes'
+                      routeName='openshift.openshift-nodes'
+                      isRequired=true
+                      value=model.openshift_number_worker_nodes}}
+
+        {{review-link label='Docker Storage per Worker'
+                      routeName='openshift.openshift-nodes'
+                      isRequired=true
+                      value=storageSizeGB}}
+
+        {{review-link label='vCPU Needed'
+                      routeName='openshift.openshift-nodes'
+                      isRequired=true
+                      value=vcpuNeeded}}
+
+        {{review-link label='RAM Needed'
+                      routeName='openshift.openshift-nodes'
+                      isRequired=true
+                      value=ramNeededGB}}
+
+        {{review-link label='Disk Needed'
+                      routeName='openshift.openshift-nodes'
+                      isRequired=true
+                      value=diskNeededGB}}
+
+        {{review-link label='Storage Type'
+                      routeName='openshift.openshift-configuration'
+                      isRequired=true
+                      value=model.openshift_storage_type}}
+
+        {{review-link label='Storage Host'
+                      routeName='openshift.openshift-configuration'
+                      value=model.openshift_storage_host}}
+
+        {{review-link label='Export Path'
+                      routeName='openshift.openshift-configuration'
+                      value=model.openshift_export_path}}
+
+        {{review-link label='Username'
+                      routeName='openshift.openshift-configuration'
+                      value=model.openshift_username}}
+
+        {{review-link label='Subdomain'
+                      routeName='openshift.openshift-configuration'
+                      value=fullOpenshiftSubdomain}}
+
+        {{review-link label='Example Application'
+                      routeName='openshift.openshift-configuration'
+                      value=deployOseExampleApp}}
+
+      {{/accordion-item}}
+    {{/if}}
+
+    {{#if isCloudForms}}
+      {{#accordion-item name=fullnameCloudForms isOpen=isCloudFormsOpen}}
+          {{review-link label='Primary Appliance' routeName='where-install' isRequired=true value=primaryCfmeInstallLoc }}
+          {{#if multipleCfme}}
+            {{review-link label='Worker Appliance' routeName='where-install' isRequired=true value=workerCfmeInstallLoc }}
+          {{/if}}
+          {{review-link label='CFME Root password' routeName='cloudforms.cfme-configuration'
+                        isRequired=true isPassword=true value=model.cfme_root_password }}
+          {{review-link label='CFME Admin password' routeName='cloudforms.cfme-configuration'
+                        isRequired=true isPassword=true value=model.cfme_admin_password }}
+          {{review-link label='CFME Database password' routeName='cloudforms.cfme-configuration'
+                        isRequired=true isPassword=true value=model.cfme_db_password }}
+      {{/accordion-item}}
+    {{/if}}
+
+    {{#if isSubscriptions}}
+        {{#accordion-item name='Subscriptions' isOpen=isSubscriptionsOpen}}
+            {{#if isDisconnected}}
+                {{review-link label='Content Mirror URL'
+                              routeName='subscriptions.credentials'
+                              isRequired=true
+                              value=cdnUrl }}
+                {{review-link label='Manifest File'
+                              routeName='subscriptions.credentials'
+                              isRequired=true
+                              value=model.manifest_file }}
+            {{else}}
+                {{review-link label='Subscription Management Application'
+                              routeName='subscriptions.management-application' isRequired=true
+                              value=deploymentController.managementApplicationName }}
+            {{/if}}
+
+            {{#each reviewSubscriptions as |sub|}}
+                {{review-link label='Subscription Name'
+                              routeName='subscriptions.select-subscriptions'
+                              value=sub.product_name }}
+                {{review-link label='Contract Number'
+                              routeName='subscriptions.select-subscriptions'
+                              value=sub.contract_number }}
+                {{review-link label='Quantity Attached'
+                              routeName='subscriptions.select-subscriptions'
+                              value=sub.quantity_attached }}
+                {{#if hasSubscriptionsToAttach}}
+                    {{review-link label='Quantity Added'
+                                  routeName='subscriptions.select-subscriptions'
+                                  value=(if isMissingSubscriptions null sub.quantity_to_add)
+                                  isRequired=true
+                                  validationMessage="Need to re-enter"}}
+                {{/if}}
+            {{else}}
+                {{review-link label='Quantity'
+                              routeName='subscriptions.select-subscriptions'
+                              value="0 - no subscriptions in manifest" }}
+            {{/each}}
+
+        {{/accordion-item}}
+
+    {{/if}}
+
+    </div>
+  </div>
+
+  {{#cancel-back-next backRouteName=backRouteNameonReviewInstallation
+                      disableBack=false
+                      disableCancel=isStarted}}
+      {{#if isStarted}}
+          {{#link-to 'review.progress.overview' role="button" class='btn btn-primary next-button'}}
+            Next <i class="fa fa-angle-right"></i>
+          {{/link-to}}
+      {{else}}
+          {{#button-f disabled=buttonDeployDisabled action="onDeployButton"}}
+             {{buttonDeployTitle}} <i class="fa fa-angle-right"></i>
+          {{/button-f}}
+      {{/if}}
+  {{/cancel-back-next}}
+
+{{else}}
+
+  <div class="spinner spinner-md spinner-inline"></div>
+  <span class='spinner-text'>
+      {{spinnerTextMessage}}
+  </span>
+
+{{/unless}}
+
+{{continue-deployment-modal openModal=openModal
+                            deployment=deploymentController.model
+                            installDeployment='installDeployment'
+                            }}

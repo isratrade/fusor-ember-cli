@@ -1,0 +1,134 @@
+{{#if showErrorMessage}}
+  <div class="row">
+    <div class='col-md-9'>
+      <div class='alert alert-danger rhci-alert'>
+          <i class="fa fa-2x fa-times-circle-o errorForValidation"></i>
+          &nbsp;
+          {{errorMsg}}
+      </div>
+    </div>
+  </div>
+{{/if}}
+
+{{#if isLoading}}
+      <div class="spinner spinner-md spinner-inline"></div>
+      <span class='spinner-text'>
+        Loading from Red Hat Customer Portal ...
+      </span>
+{{else}}
+<div class="row">
+  <div class='col-md-9'>
+
+    <p>
+    <strong>Optional</strong>: If you need to <strong>attach more</strong> subscriptions to <strong>{{deploymentController.model.upstream_consumer_name}}</strong> for the components of your QCI deployment, please do so before proceeding.
+    </p>
+
+    <br />
+
+    {{#unless isStarted}}
+
+        {{#if hasSubscriptionPools}}
+          <table class="table table-bordered small">
+            <thead>
+              <tr>
+                <th> </th>
+                <th> Subscription Name </th>
+                <th> Contract Number </th>
+                <th> System Type </th>
+                <th> Start Date </th>
+                <th> End Date </th>
+                <th> Attached </th>
+                <th> Available </th>
+                <th> Quantity </th>
+              </tr>
+              </thead>
+
+            <tbody>
+            {{#each subscriptionPools as |subscription|}}
+              {{tr-subscription subscription=subscription
+                                numSubscriptionsRequired=numSubscriptionsRequired
+                                model=model
+                                saveSubscription='saveSubscription'}}
+            {{else}}
+              <tr>
+                <td colspan="8">
+                  <p class='no_subscriptions'>
+                    No subscriptions found. Check your account in in the <a href='https://idp.redhat.com/idp/' target='_blank'>Red Hat Customer Portal</a> to verify you have subscriptions available.
+                  </p>
+                </td>
+              </tr>
+            {{/each}}
+
+            </tbody>
+          </table>
+
+        {{else}}
+
+          <div class='col-md-9'>
+
+            <div class='alert alert-info rhci-alert'>
+                    You have no additional subscriptions to add to this subscription management application. Please see the
+                    <a href='https://idp.redhat.com/idp/' target='_blank'>Red Hat Customer Portal</a> for more information.
+            </div>
+
+            {{#if hasSubscriptionSavedInModel}}
+                <div class='alert alert-danger rhci-alert'>
+                        Below are the subscriptions that you previously saved with the deployment.
+                </div>
+
+                <table class="table table-bordered small">
+                  <thead>
+                    <tr>
+                      <th> </th>
+                      <th> Subscription Name </th>
+                      <th> Contract Number </th>
+                      <th> Quantity </th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {{#each model as |sub|}}
+                      {{tr-subscription-saved subscription=sub}}
+                    {{/each}}
+                    </tbody>
+                </table>
+            {{/if}}
+          </div>
+        {{/if}}
+
+    {{else}}
+
+          <table class="table table-bordered small">
+            <thead>
+              <tr>
+                <th> </th>
+                <th> Subscription Name </th>
+                <th> Contract Number </th>
+                <th> Quantity </th>
+              </tr>
+              </thead>
+
+              <tbody>
+              {{#each model as |sub|}}
+                {{tr-subscription-saved subscription=sub}}
+              {{else}}
+                <tr>
+                  <td colspan=4>
+                    No subscriptions were attached to deployment
+                  </td>
+                </tr>
+              {{/each}}
+              </tbody>
+          </table>
+
+    {{/unless}}
+  </div>
+</div>
+
+{{cancel-back-next backRouteName='subscriptions.management-application'
+                   disableBack=false
+                   nextRouteName="subscriptions.review-subscriptions"
+                   disableNext=false
+                   disableCancel=isStarted}}
+
+{{/if}}

@@ -1,0 +1,49 @@
+{{#if showErrorMessage}}
+  <div class="row">
+    <div class='col-md-9'>
+      <div class='alert alert-danger rhci-alert'>
+          <i class="fa fa-2x fa-exclamation-triangle errorForValidation"></i>
+          &nbsp;
+          {{errorMsg}}
+      </div>
+    </div>
+  </div>
+{{/if}}
+
+<div class='row'>
+  <div class='col-md-12'>
+    <ul class="nav nav-tabs col-md-12" data-tabs="pills">
+        {{#link-to 'review.progress.overview' tagName='li'}}
+          <a>Overview</a>
+        {{/link-to}}
+        {{#link-to 'review.progress.details' tagName='li'}}
+          <a>Details</a>
+        {{/link-to}}
+        {{#link-to 'review.progress.log' tagName='li'}}
+          <a>Log</a>
+        {{/link-to}}
+    </ul>
+
+    <div class="col-md-12">
+        {{outlet}}
+    </div>
+
+  </div>
+</div>
+
+{{! Hide buttons if the deployment has_content_error }}
+{{#unless deploymentController.model.has_content_error}}
+  {{#cancel-back-next backRouteName='review.installation'
+                      disableBack=false
+                      disableCancel=isStarted}}
+    {{#if deployTaskIsFinished}}
+      {{#link-to 'review.summary' role="button" class='btn btn-primary next-button'}}
+          Next <i class="fa fa-angle-right"></i>
+      {{/link-to}}
+    {{else}}
+      <button class='btn btn-primary next-button' disabled=true>
+          {{deployButtonTitle}} <i class="fa fa-angle-right"></i>
+      </button>
+    {{/if}}
+  {{/cancel-back-next}}
+{{/unless}}

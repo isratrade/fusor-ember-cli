@@ -1,0 +1,58 @@
+<br />
+<h1>Select Product(s) to Deploy</h1>
+<br />
+<br />
+
+<div class='col-md-4'>
+  <strong>Choose at least one:</strong>
+
+  {{rhci-item isChecked=isRhev name=fullnameRhev tagline=taglineRhev desc=descRhev cssId='is_rhev' isDisabled=isDisabledRhev}}
+  {{rhci-item isChecked=isOpenStack name=fullnameOpenStack tagline=taglineOpenStack desc=descOpenStack cssId='is_openstack' isDisabled=isDisabledOpenStack}}
+  <br />
+  <div>
+    <strong>Optionally, choose:</strong>
+  </div>
+
+  {{rhci-item isChecked=isCloudForms name=fullnameCloudForms tagline=taglineCloudForms desc=descCloudForms cssId='is_cloudforms' isDisabled=isDisabledCfme }}
+  {{rhci-item isChecked=isOpenShift name=fullnameOpenShift tagline=taglineOpenShift desc=descOpenShift cssId='is_openshift' isDisabled=isDisabledOpenShift }}
+</div>
+
+<div class='col-md-4'>
+  <strong>To deploy the selected products, you will need:</strong>
+
+  <div class='req-block'>
+    {{partial 'req-general'}}
+
+    {{#if isRhev}}
+      {{partial 'req-rhev'}}
+    {{/if}}
+
+    {{#if isOpenStack}}
+      {{partial 'req-openstack'}}
+    {{/if}}
+
+    {{#if isCloudForms}}
+      {{partial 'req-cloudforms'}}
+    {{/if}}
+
+    {{#if isOpenShift}}
+      {{partial 'req-openshift'}}
+    {{/if}}
+
+    {{partial 'req-disconnected'}}
+  </div>
+
+  <div class='download-reqs'>
+    <a download href="{{reqDownloadLink}}" target="_blank" data-qci='download-reqs'>
+      <span class="pficon pficon-save"></span>
+      Download these requirements
+    </a>
+  </div>
+
+  {{cancel-back-next  nextRouteName=satelliteTabRouteName
+                      disableNext=disableNextOnStart
+                      disableCancel=isStarted
+                      deploymentName=deploymentName
+                      isNew=isNew
+                      bottomBar=false}}
+</div>

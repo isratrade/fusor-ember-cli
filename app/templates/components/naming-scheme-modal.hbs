@@ -1,0 +1,64 @@
+{{#pf-modal-base idModal='namingSchemeModal'
+                 openModal=openModal
+                 title='Edit Naming Scheme'
+                 closeXAction='cancelNamingScheme'}}
+
+      {{#pf-modal-body}}
+            <p>
+            Enforcing a naming scheme will ensure all selected hypervisors get named automatically and consistently.
+            </p>
+
+            <form class="form-horizontal">
+              <div class="form-group">
+                <span data-qci="host-naming-scheme">
+                  {{select-simple-f label='Host naming scheme'
+                                    content=namingOptions
+                                    value=hostNamingScheme
+                                    disabled=isStarted
+                                    labelSize='col-lg-4 col-md-4 col-sm-4 col-xs-4 col-xs-offset-1'
+                                    inputSize='col-lg-4 col-md-5 col-sm-5 col-xs-4'
+                                    disabled=isStarted
+                                    renderInPlace=true
+                                    action="setSelectValue"
+                                    fieldName="hostNamingScheme"}}
+                </span>
+                {{#if isCustomScheme}}
+                    {{text-f label='Prepend host names with'
+                             maxlength="40"
+                             value=customPreprendName
+                             disabled=isStarted
+                             placeholder='Enter custom prefix'
+                             validator=customPrefixValidator
+                             labelSize='col-lg-4 col-md-4 col-sm-4 col-xs-4 col-xs-offset-1'
+                             inputSize='col-lg-4 col-md-5 col-sm-5 col-xs-4'}}
+
+                    {{#base-f label='Three host example'
+                              labelSize='col-lg-4 col-md-4 col-sm-4 col-xs-4 col-xs-offset-1'}}
+                              {{customPreprendNameTrimmed}}1<br />
+                              {{customPreprendNameTrimmed}}2<br />
+                              {{customPreprendNameTrimmed}}3<br />
+                    {{/base-f}}
+                {{/if}}
+
+                {{#if isHypervisorN}}
+                    {{#base-f label='Three host example'
+                              labelSize='col-lg-4 col-md-4 col-sm-4 col-xs-4 col-xs-offset-1'}}
+                        hypervisor45<br />
+                        hypervisor12<br />
+                        hypervisor310<br />
+                        <span style='color: #999'>hypervisor + {host_id}</span>
+                    {{/base-f}}
+                {{/if}}
+
+
+              </div>
+            </form>
+      {{/pf-modal-body}}
+
+      {{#pf-modal-footer}}
+        <button {{action 'cancelNamingScheme'}} class="btn btn-default">Cancel</button>
+        <button {{action 'saveNamingScheme'}} class="btn btn-primary"
+                disabled={{invalidCustomPrefix}}>Edit</button>
+      {{/pf-modal-footer}}
+
+{{/pf-modal-base}}
