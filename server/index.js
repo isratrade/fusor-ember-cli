@@ -21,4 +21,6 @@ module.exports = function(app) {
   }
   proxies.forEach(function(route) { route(app); });
 
+  var express = require('express');
+  app.use('/extras', express.static(__dirname + "/../extras"));
 };

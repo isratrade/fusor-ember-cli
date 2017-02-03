@@ -2,6 +2,7 @@ import ApplicationAdapter from './application';
 
 export default ApplicationAdapter.extend({
 
+  host: window.fusorServer,
   namespace: 'fusor/api/openstack',
 
   // 'overcloud' is hard coded

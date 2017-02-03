@@ -17,4 +17,4 @@ use-ember-cli*.sh
 npm-debug.log
 testem.log
 coverage.json
-.nvmrc
+extra-settings.json

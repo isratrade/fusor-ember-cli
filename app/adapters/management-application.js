@@ -2,6 +2,7 @@ import ApplicationAdapter from './application';
 
 export default ApplicationAdapter.extend({
 
+  host: window.fusorServer,
   namespace: '',
   urlForQuery(query, modelName) {
     // Use owner key to get consumers (subscription application manangers)
