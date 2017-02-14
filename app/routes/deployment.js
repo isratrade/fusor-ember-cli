@@ -38,28 +38,26 @@ export default Ember.Route.extend(DeploymentRouteMixin, {
   },
 
   loadUpstreamConsumer(controller, model) {
-    // check if org has upstream UUID using Katello V2 API
-    const url = `/katello/api/v2/organizations/${model.get('organization.id')}`;
-    Ember.$.getJSON(url).then(results => {
+    // check if org has upstream UUID
+    this.store.findRecord('organization', model.get('organization.id')).then(org => {
       const shouldSetUpstreamConsumer =
-        Ember.isPresent(results.owner_details) &&
-        Ember.isPresent(results.owner_details.upstreamConsumer) &&
+        Ember.isPresent(org.get('upstream_consumer_uuid')) &&
         Ember.isBlank(controller.get('model.upstream_consumer_uuid'));
 
       if (shouldSetUpstreamConsumer) {
-        controller.set('model.upstream_consumer_uuid', results.owner_details.upstreamConsumer.uuid);
-        controller.set('model.upstream_consumer_name', results.owner_details.upstreamConsumer.name);
+        controller.set('model.upstream_consumer_uuid', org.get('upstream_consumer_uuid'));
+        controller.set('model.upstream_consumer_name', org.get('upstream_consumer_name'));
       }
     });
   },
 
   loadDefaultData(model, opt) {
     Ember.RSVP.all([
-      request('/api/v2/settings?search=openshift').then(settings => {
-        model.loadOpenshiftDefaults(settings['results'], opt);
+      request(window.fusorServer + '/fusor/api/v21/settings?search=openshift').then(settings => {
+        model.loadOpenshiftDefaults(settings['settings'], opt);
       }),
-      request('/api/v2/settings?search=cloudforms').then(settings => {
-        model.loadCloudformsDefaults(settings['results'], opt);
+      request(window.fusorServer + '/fusor/v21/settings?search=cloudforms').then(settings => {
+        model.loadCloudformsDefaults(settings['settings'], opt);
       })
     ]);
   },
