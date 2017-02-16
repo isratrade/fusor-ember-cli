@@ -5,7 +5,7 @@ import ActiveModelAdapter from 'active-model-adapter';
 var token = Ember.$('meta[name="csrf-token"]').attr('content');
 export default ActiveModelAdapter.extend({
   host: window.fusorServer,
-  namespace: 'api/v21',
+  namespace: 'fusor/api/v21',
   headers: {
     "X-CSRF-Token": token,
     "Accept": "application/json",
