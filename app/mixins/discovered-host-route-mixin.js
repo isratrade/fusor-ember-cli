@@ -24,7 +24,7 @@ export default Ember.Mixin.create({
       discoveredHosts: this.store.query('discovered-host', {per_page: 1000})
     }).then(hash => {
       this.set('controller.deployingHosts', hash.deployingHosts);
-      this.set('controller.allDiscoveredHosts', hash.discoveredHosts.filterBy('is_discovered', true));
+      this.set('controller.allDiscoveredHosts', hash.discoveredHosts);
     }).finally(() => controller.set('isLoadingHosts', false));
   },
 

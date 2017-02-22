@@ -59,7 +59,7 @@ export default Ember.Mixin.create({
 
       if (this.get('isValidHostname')) {
         request({
-          url: '/api/v21/discovered_hosts/' + host.get('id') + '/rename',
+          url: window.fusorServer + '/fusor/api/v21/discovered_hosts/' + host.get('id') + '/rename',
           type: "PUT",
           data: JSON.stringify({'discovered_host': { 'name': host.get('name') } }),
           headers: {

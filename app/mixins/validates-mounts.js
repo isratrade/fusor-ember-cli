@@ -4,7 +4,7 @@ import request from 'ic-ajax';
 export default Ember.Mixin.create({
   fetchMountValidation(deployment_id, params) {
     return request({
-      url: `/fusor/api/v21/deployments/${deployment_id}/check_mount_point`,
+      url: `${window.fusorServer}/fusor/api/v21/deployments/${deployment_id}/check_mount_point`,
       type: 'GET',
       data: params,
       headers: {

@@ -5,7 +5,7 @@ export default Ember.Route.extend({
   model() {
     var deploymentId = this.modelFor('deployment').get('id');
     return request({
-      url: `/fusor/api/v21/deployments/${deploymentId}/compatible_cpu_families`,
+      url: `${window.fusorServer}/fusor/api/v21/deployments/${deploymentId}/compatible_cpu_families`,
       type: 'GET',
       headers: {
         "Accept": "application/json",

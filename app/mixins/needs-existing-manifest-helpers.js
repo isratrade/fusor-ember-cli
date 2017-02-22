@@ -8,7 +8,7 @@ export default Ember.Mixin.create({
     const hasModelUpstreamConsumerUuid = Ember.isPresent(modelUpstreamConsumerUuid);
 
     return new Ember.RSVP.Promise((res, rej) => {
-      const url = `/katello/api/v2/organizations/${orgId}/subscriptions`;
+      const url = `${window.fusorServer}/fusor/api/v21/organizations/${orgId}/subscriptions`;
       Ember.$.getJSON(url).then(response => {
 
         const satManifestExists = response.results.filter(sub => {
@@ -23,7 +23,7 @@ export default Ember.Mixin.create({
 
   loadSubscriptions() {
     const orgId = this.modelFor('deployment').get('organization.id');
-    const subsUrl = `/katello/api/v2/organizations/${orgId}/subscriptions`;
+    const subsUrl = `${window.fusorServer}/fusor/api/v21/organizations/${orgId}/subscriptions`;
     return new Ember.RSVP.Promise((res, rej) => {
       Ember.$.getJSON(subsUrl).then(response => {
         if(Ember.isNone(response.results)) {

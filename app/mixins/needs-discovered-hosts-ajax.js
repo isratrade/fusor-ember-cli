@@ -5,7 +5,7 @@ export default Ember.Mixin.create({
   postDiscoveredHostIds(deployment, hypervisorIds) {
     const token = Ember.$('meta[name="csrf-token"]').attr('content');
     return request({
-      url: '/fusor/api/v21/deployments/' + deployment.get('id'),
+      url: window.fusorServer + '/fusor/api/v21/deployments/' + deployment.get('id'),
       type: 'PUT',
       data: JSON.stringify({'deployment': { 'discovered_host_ids': hypervisorIds } }),
       headers: {

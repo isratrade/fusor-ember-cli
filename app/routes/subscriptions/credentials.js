@@ -49,7 +49,7 @@ export default Ember.Route.extend({
       controller.set('disableCredentialsNext', true);
 
       request({
-        url: '/customer_portal/login/',
+        url: window.fusorServer + '/customer_portal/login/',
         type: "POST",
         data: JSON.stringify({username: identification, password: password}),
         headers: {
@@ -69,7 +69,7 @@ export default Ember.Route.extend({
 
     logoutPortal() {
       request({
-        url: '/customer_portal/logout/',
+        url: window.fusorServer + '/customer_portal/logout/',
         type: "POST",
         headers: {
           "Accept": "application/json",
@@ -114,7 +114,7 @@ export default Ember.Route.extend({
       var identification = controller.get('model.identification');
       var token = Ember.$('meta[name="csrf-token"]').attr('content');
       var self = this;
-      var url = '/customer_portal/users/' + identification + "/owners";
+      var url = window.fusorServer + '/customer_portal/users/' + identification + "/owners";
 
       return new Ember.RSVP.Promise(function (resolve, reject) {
         request({
@@ -189,7 +189,7 @@ export default Ember.Route.extend({
     // a previous login success. This method is called to confirm that our
     // session is still valid, and if not, sets the local storage value to false
     return new Ember.RSVP.Promise((resolve, reject) => {
-      const urlVerify = `/customer_portal/is_authenticated`;
+      const urlVerify = window.fusorServer + '/customer_portal/is_authenticated';
 
       Ember.$.getJSON(urlVerify).then(
         (response) => resolve(response), () => resolve(false));
