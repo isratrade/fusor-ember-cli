@@ -208,7 +208,7 @@ export default Ember.Route.extend({
 
     let deploymentId = this.get('controller.deploymentId');
     request({
-      url: `/fusor/api/openstack/deployments/${deploymentId}/deployment_plans/overcloud/update_parameters`,
+      url: `${window.fusorServer}/fusor/api/openstack/deployments/${deploymentId}/deployment_plans/overcloud/update_parameters`,
       type: 'PUT',
       headers: {
         "Accept": "application/json",

@@ -78,7 +78,7 @@ export default Ember.Route.extend(DeploymentRouteMixin, {
       controller.set('showSpinner', true);
 
       request({
-        url: '/fusor/api/v21/deployments/' + deployment.get('id') + '/deploy',
+        url: window.fusorServer + '/fusor/api/v21/deployments/' + deployment.get('id') + '/deploy',
         type: "PUT",
         headers: {
           "Accept": "application/json",

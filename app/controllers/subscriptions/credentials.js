@@ -85,7 +85,7 @@ export default Ember.Controller.extend(NeedsDeploymentMixin, {
       //ic-ajax request
       request({
         type: 'PUT',
-        url: '/fusor/api/v21/subscriptions/upload',
+        url: window.fusorServer + '/fusor/api/v21/subscriptions/upload',
         data: formData,
         processData: false,
         headers: {'X-CSRF-Token': token},

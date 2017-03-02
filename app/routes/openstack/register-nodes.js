@@ -99,7 +99,7 @@ export default Ember.Route.extend(PollingPromise, {
     let controller = this.get('controller');
     let deploymentId = this.get('controller.deployment.id');
     let token = Ember.$('meta[name="csrf-token"]').attr('content');
-    let url = `/fusor/api/openstack/deployments/${deploymentId}/node_ports`;
+    let url = `${window.fusorServer}/fusor/api/openstack/deployments/${deploymentId}/node_ports`;
 
     return request({
       url: url,

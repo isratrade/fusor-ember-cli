@@ -73,7 +73,7 @@ export default TextFComponent.extend({
     this.set('validationTrigger', null);
 
     request({
-      url: `/fusor/api/v21/deployments/${deploymentId}/validate_cdn`,
+      url: `${window.fusorServer}/fusor/api/v21/deployments/${deploymentId}/validate_cdn`,
       headers: {
         "Accept": "application/json",
         "X-CSRF-Token": token
