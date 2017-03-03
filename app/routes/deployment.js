@@ -53,10 +53,10 @@ export default Ember.Route.extend(DeploymentRouteMixin, {
 
   loadDefaultData(model, opt) {
     Ember.RSVP.all([
-      request(window.fusorServer + '/fusor/api/v21/settings?search=openshift').then(settings => {
+      request(window.fusorServer + '/fusor/api/v21/settings/openshift').then(settings => {
         model.loadOpenshiftDefaults(settings['settings'], opt);
       }),
-      request(window.fusorServer + '/fusor/api/v21/settings?search=cloudforms').then(settings => {
+      request(window.fusorServer + '/fusor/api/v21/settings/cloudforms').then(settings => {
         model.loadCloudformsDefaults(settings['settings'], opt);
       })
     ]);
