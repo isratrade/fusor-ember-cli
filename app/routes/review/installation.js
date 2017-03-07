@@ -121,7 +121,7 @@ export default Ember.Route.extend(NeedsExistingManifestHelpers, {
     controller.set('spinnerTextMessage', "Validating deployment...");
 
     return request({
-      url: `/fusor/api/v21/deployments/${deploymentId}/validate`,
+      url: `${window.fusorServer}/fusor/api/v21/deployments/${deploymentId}/validate`,
       type: "GET",
       headers: {
         "Accept": "application/json",
@@ -148,7 +148,7 @@ export default Ember.Route.extend(NeedsExistingManifestHelpers, {
     controller.set('spinnerTextMessage', "Syncing OpenStack...");
 
     return request({
-      url: `/fusor/api/v21/openstack_deployments/${openstack_deployment.get('id')}/sync_openstack`,
+      url: `${window.fusorServer}/fusor/api/v21/openstack_deployments/${openstack_deployment.get('id')}/sync_openstack`,
       type: "POST",
       headers: {
         "Accept": "application/json",

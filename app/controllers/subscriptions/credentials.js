@@ -15,9 +15,9 @@ export default Ember.Controller.extend(NeedsDeploymentMixin, {
 
   subscriptionsController: Ember.inject.controller('subscriptions'),
 
-  validCredentials: Ember.computed('model.identification', 'password', function() {
-    // password is not saved in the model
-    return (Ember.isPresent(this.get('model.identification')) && Ember.isPresent(this.get('password')));
+  validCredentials: Ember.computed('model.identification', 'model.password', function() {
+    // password   is not saved in the model
+    return (Ember.isPresent(this.get('model.identification')) && Ember.isPresent(this.get('model.password')));
   }),
 
   enableCredentialsNext: Ember.computed('validCredentials', 'model.isAuthenticated', function() {

@@ -8,6 +8,8 @@ export default Ember.Route.extend(LoadUpdatedSubscriptions, {
     var deployment = this.modelFor('deployment');
     var sessionPortal = this.modelFor('subscriptions').sessionPortal;
     var ownerKey = sessionPortal.get('ownerKey');
+    var identification = sessionPortal.get('identification');
+    var password = sessionPortal.get('password');
 
     // Use owner key to get consumers (subscription application manangers)
     // GET /customer_portal/owners/#{OWNER['key']}/consumers?type=satellite
@@ -23,7 +25,9 @@ export default Ember.Route.extend(LoadUpdatedSubscriptions, {
       return Ember.A([managementApp]);
     } else {
       return this.store.query('management-application', {
-        owner_key: ownerKey
+        owner_key: ownerKey,
+        username: identification,
+        password: password
       }).then(function(results) {
         // in case go to this route from URL
         sessionPortal.set('isAuthenticated', true);
@@ -118,11 +122,12 @@ export default Ember.Route.extend(LoadUpdatedSubscriptions, {
     let controller = this.get('controller');
     let deployment = this.modelFor('deployment');
     let consumerUUID = deployment.get('upstream_consumer_uuid');
+    let sessionPortal = this.modelFor('subscriptions').sessionPortal;
 
     controller.set('showWaitingMessage', true);
     controller.set('msgWaiting', 'Updating subscriptions');
     controller.set('errorMsg', null);
 
-    return this.loadUpdatedSubscriptionInfo(deployment, consumerUUID);
+    return this.loadUpdatedSubscriptionInfo(deployment, consumerUUID, sessionPortal);
   }
 });

@@ -3,7 +3,7 @@ import request from 'ic-ajax';
 let Promise = Ember.RSVP.Promise;
 
 const validationUrlRoot =
-  '/fusor/api/v21/subscriptions/validate?deployment_id=';
+  window.fusorServer + '/fusor/api/v21/subscriptions/validate?deployment_id=';
 
 const SubscriptionUtil = {
   validate(deploymentId) {
