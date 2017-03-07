@@ -42,14 +42,14 @@ export default Ember.Route.extend({
       var self = this;
       var controller = this.controllerFor('subscriptions/credentials');
       var identification = controller.get('model.identification');
-      var password = controller.get('password');
+      var password = controller.get('model.password');
       var token = Ember.$('meta[name="csrf-token"]').attr('content');
 
       controller.set('nextButtonTitle', "Logging in ...");
       controller.set('disableCredentialsNext', true);
 
       request({
-        url: window.fusorServer + '/customer_portal/login/',
+        url: window.fusorServer + '/fusor/api/v21/customer_portal/login/',
         type: "POST",
         data: JSON.stringify({username: identification, password: password}),
         headers: {
@@ -69,7 +69,7 @@ export default Ember.Route.extend({
 
     logoutPortal() {
       request({
-        url: window.fusorServer + '/customer_portal/logout/',
+        url: window.fusorServer + '/fusor/api/v21/customer_portal/logout/',
         type: "POST",
         headers: {
           "Accept": "application/json",
@@ -93,11 +93,13 @@ export default Ember.Route.extend({
       var self = this;
       var controller = this.controllerFor('subscriptions/credentials');
       var identification = controller.get('model.identification');
+      var password = controller.get('model.password');
       var sessionPortal = this.modelFor('subscriptions').sessionPortal;
       if (sessionPortal) {
         sessionPortal.set('identification', identification);
+        sessionPortal.set('password', password);
       } else {
-        sessionPortal = self.store.createRecord('session-portal', {identification: identification});
+        sessionPortal = self.store.createRecord('session-portal', {identification: identification, password: password});
       }
       sessionPortal.save().then(function(result) {
         controller.set('showErrorMessage',false);
@@ -112,9 +114,17 @@ export default Ember.Route.extend({
     authenticatePortal() {
       var controller = this.controllerFor('subscriptions/credentials');
       var identification = controller.get('model.identification');
+      var password = controller.get('model.password');
       var token = Ember.$('meta[name="csrf-token"]').attr('content');
       var self = this;
-      var url = window.fusorServer + '/customer_portal/users/' + identification + "/owners";
+      var url = window.fusorServer +
+                '/fusor/api/v21/customer_portal/users/' +
+                identification +
+                "/owners" +
+                '?username=' +
+                identification +
+                '&password=' +
+                password;
 
       return new Ember.RSVP.Promise(function (resolve, reject) {
         request({
@@ -189,7 +199,7 @@ export default Ember.Route.extend({
     // a previous login success. This method is called to confirm that our
     // session is still valid, and if not, sets the local storage value to false
     return new Ember.RSVP.Promise((resolve, reject) => {
-      const urlVerify = window.fusorServer + '/customer_portal/is_authenticated';
+      const urlVerify = window.fusorServer + '/fusor/api/v21/customer_portal/is_authenticated';
 
       Ember.$.getJSON(urlVerify).then(
         (response) => resolve(response), () => resolve(false));

@@ -6,8 +6,8 @@ export default ApplicationAdapter.extend({
   namespace: '',
   urlForQuery(query, modelName) {
     // Use consumer UUID to get pools
-    // GET /customer_portal/pools?consumer=' + consumerUUID + '&listall=false');
-    return "/customer_portal/pools?consumer=" + query["uuid"] + "&listall=false";
+    // GET /fusor/api/v21/customer_portal/pools?consumer=' + consumerUUID + '&listall=false');
+    return window.fusorServer + "/fusor/api/v21/customer_portal/pools?consumer=" + query["uuid"] + "&listall=false";
   }
 
 });

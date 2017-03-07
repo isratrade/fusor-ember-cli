@@ -24,7 +24,7 @@ export default Ember.Route.extend(ResetsVerticalScroll, LoadUpdatedSubscriptions
     controller.set('isLoading', true);
     controller.set('errorMsg', null);
 
-    this.loadUpdatedSubscriptionInfo(deployment, consumerUUID).then(results => {
+    this.loadUpdatedSubscriptionInfo(deployment, consumerUUID, sessionPortal).then(results => {
       let entitlementsResults = results.entitlements;
       let allPoolsResults = results.pools;
       let subscriptionResults = results.subscriptions;

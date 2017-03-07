@@ -2,8 +2,10 @@ import Ember from 'ember';
 
 export default Ember.Mixin.create({
 
-  loadUpdatedSubscriptionInfo(deployment, consumerUUID) {
+  loadUpdatedSubscriptionInfo(deployment, consumerUUID, sessionPortal) {
     let deploymentId = deployment.get('id');
+    let username = sessionPortal.get('identification');
+    let password = sessionPortal.get('password');
 
     if (deployment.get('is_disconnected')) {
       return Ember.RSVP.hash({
@@ -18,8 +20,14 @@ export default Ember.Mixin.create({
     }
 
     return Ember.RSVP.hash({
-      entitlements: this.store.query('entitlement', {uuid: consumerUUID}),
-      pools: this.store.query('pool', {uuid: consumerUUID}),
+      entitlements: this.store.query('entitlement', {uuid: consumerUUID,
+                                                     username: sessionPortal.get('identification'),
+                                                     password: sessionPortal.get('password')
+                                                    }),
+      pools: this.store.query('pool', {uuid: consumerUUID,
+                                       username: sessionPortal.get('identification'),
+                                       password: sessionPortal.get('password')
+                                      }),
       subscriptions: this.store.query('subscription', {
         deployment_id: deploymentId,
         source: 'added',

@@ -49,7 +49,7 @@ export default Ember.Controller.extend(NeedsDeploymentMixin, {
       var ownerKey = this.get('sessionPortal').get('ownerKey');
 
       //POST /customer_portal/consumers?owner=#{OWNER['key']}, {"name":"#{RHCI_DISTRIBUTOR_NAME}","type":"satellite","facts":{"distributor_version":"sat-6.0","system.certificate_version":"3.2"}}
-      var url = ('/customer_portal/consumers?=' + ownerKey);
+      var url = (window.fusorServer + '/fusor/api/v21/customer_portal/consumers?=' + ownerKey);
 
       if (this.get('isInvalidMgmtAppName')) {
         this.set('showWaitingMessage', false);
