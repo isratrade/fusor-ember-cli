@@ -31,10 +31,10 @@ export default Ember.Route.extend(DiscoveredHostRouteMixin, NeedsDiscoveredHosts
 
       let deployment = this.modelFor('deployment');
       let hypervisorModelIds = this.controllerFor('hypervisor/discovered-host').get('hypervisorModelIds');
-
+      let hypervisorHosts = this.controllerFor('hypervisor/discovered-host').get('hypervisorHosts');
       this.set('saveOnTransition', false);
       transition.abort();
-      this.postDiscoveredHostIds(deployment, hypervisorModelIds).catch(err => {
+      this.postDiscoveredHosts(deployment, hypervisorHosts).catch(err => {
         console.log(err);
       }).finally(() => {
         transition.retry();
