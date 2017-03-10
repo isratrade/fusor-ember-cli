@@ -69,7 +69,7 @@
         {{#if isSelfHosted}}
             {{#review-link label='Engine/Hypervisor Host Name' routeName='hypervisor.discovered-host' isRequired=true value=selectedHypervisorHosts useYieldInstead=true}}
                 {{#each selectedHypervisorHosts as |host|}}
-                   {{hypervisor-name host=host hypervisorDomain=hypervisorDomain}}
+                   {{hypervisor-name host=host hypervisorDomain=defaultDomainName}}
                 {{/each}}
             {{/review-link}}
 
@@ -79,7 +79,7 @@
 
             {{#review-link label='Hypervisor Host Name' routeName='hypervisor.discovered-host' isRequired=true value=selectedHypervisorHosts useYieldInstead=true}}
                 {{#each selectedHypervisorHosts as |host|}}
-                   {{hypervisor-name host=host hypervisorDomain=hypervisorDomain}}
+                   {{hypervisor-name host=host hypervisorDomain=defaultDomainName}}
                 {{/each}}
             {{/review-link}}
         {{/if}}

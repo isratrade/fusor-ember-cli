@@ -14,6 +14,7 @@ export default Ember.Controller.extend(NeedsDeploymentMixin, OpenshiftMixin, {
   isDisconnected: Ember.computed.alias("deploymentController.isDisconnected"),
   isNotDisconnected: Ember.computed.not("isDisconnected"),
   cdnUrl: Ember.computed.alias("model.cdn_url"),
+  defaultDomainName: Ember.computed.alias("deploymentController.defaultDomainName"),
 
   manifestFile: Ember.computed.alias('deploymentController.model.manifest_file'),
   hasManifestFile: Ember.computed.notEmpty('manifestFile'),
@@ -167,10 +168,10 @@ export default Ember.Controller.extend(NeedsDeploymentMixin, OpenshiftMixin, {
   engineNamePlusDomain: Ember.computed(
     'selectedRhevEngine.is_discovered',
     'selectedRhevEngine.name',
-    'engineDomain',
+    'defaultDomainName',
     function() {
       if (this.get("selectedRhevEngine.is_discovered")) {
-        return (this.get("selectedRhevEngine.name") + '.' + this.get('engineDomain'));
+        return (this.get("selectedRhevEngine.name") + '.' + this.get('defaultDomainName'));
       } else {
         // name is fqdn for managed host
         return (this.get("selectedRhevEngine.name"));
