@@ -77,6 +77,14 @@ export default Ember.Controller.extend(NeedsDeploymentMixin, PaginationControlle
     }
   }),
 
+  hypervisorHosts: Ember.computed('model.[]', 'selectedRhevEngine', function() {
+    if (this.get('model')) {
+      return this.get('model').removeObject(this.get('selectedRhevEngine'));
+    } else {
+      return [];
+    }
+  }),
+
   cntSelectedHypervisorHosts: Ember.computed.alias('hypervisorModelIds.length'),
 
   hostInflection: Ember.computed('cntSelectedHypervisorHosts', function() {

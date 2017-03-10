@@ -52,27 +52,12 @@ export default Ember.Mixin.create({
     saveHostname() {
       var host = this.get('host');
       var self = this;
-      var token = Ember.$('meta[name="csrf-token"]').attr('content');
 
       // hostname to lowercase to match what user sees (css styled lowercase)
       this.set('host.name', this.get('host.name').toLowerCase());
 
       if (this.get('isValidHostname')) {
-        request({
-          url: window.fusorServer + '/fusor/api/v21/discovered_hosts/' + host.get('id') + '/rename',
-          type: "PUT",
-          data: JSON.stringify({'discovered_host': { 'name': host.get('name') } }),
-          headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json",
-            "X-CSRF-Token": token,
-            "Authorization": "Basic " + self.get('session.basicAuthToken')
-          }
-        }).then(function(response) {
-          self.sendAction('setIfHostnameInvalid', false, host.get('id'));
-        }, function(error) {
-          console.log(error);
-        });
+        self.sendAction('setIfHostnameInvalid', false, host.get('id'));
       } else {
         this.sendAction('setIfHostnameInvalid', true, host.get('id'));
       }
