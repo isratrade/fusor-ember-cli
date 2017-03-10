@@ -20,14 +20,16 @@ export default Ember.Mixin.create({
     }
 
     return Ember.RSVP.hash({
-      entitlements: this.store.query('entitlement', {uuid: consumerUUID,
-                                                     username: sessionPortal.get('identification'),
-                                                     password: sessionPortal.get('password')
-                                                    }),
-      pools: this.store.query('pool', {uuid: consumerUUID,
-                                       username: sessionPortal.get('identification'),
-                                       password: sessionPortal.get('password')
-                                      }),
+      entitlements: this.store.query('entitlement', {
+        uuid: consumerUUID,
+        username: sessionPortal.get('identification'),
+        password: sessionPortal.get('password')
+      }),
+      pools: this.store.query('pool', {
+        uuid: consumerUUID,
+        username: sessionPortal.get('identification'),
+        password: sessionPortal.get('password')
+      }),
       subscriptions: this.store.query('subscription', {
         deployment_id: deploymentId,
         source: 'added',
