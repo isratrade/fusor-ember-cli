@@ -63,14 +63,6 @@ export default Ember.Route.extend(NeedsExistingManifestHelpers, {
     controller.set('model', model);
     controller.set('showErrorMessage', false);
     controller.set('useExistingManifest', modelHash.useExistingManifest);
-    if (model.get('deploy_rhev')) {
-      this.store.findAll('hostgroup').then(function(results) {
-        var fusorBaseHostgroup = results.filterBy('name', 'Fusor Base').get('firstObject');
-        var fusorBaseDomain = fusorBaseHostgroup.get('domain.name');
-        controller.set('engineDomain', fusorBaseDomain);
-        controller.set('hypervisorDomain', fusorBaseDomain);
-      });
-    }
 
     if(modelHash.useExistingManifest) {
       controller.set('useExistingManifest', true);
