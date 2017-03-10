@@ -129,7 +129,7 @@ export default Ember.Route.extend(UsesOseDefaults, ResetsVerticalScroll, {
     const deploymentId = deployment.get('id');
     const token = Ember.$('meta[name="csrf-token"]').attr('content');
     return request({
-      url: `/fusor/api/v21/deployments/${deploymentId}/openshift_disk_space`,
+      url: `${window.fusorServer}/fusor/api/v21/deployments/${deploymentId}/openshift_disk_space`,
       headers: {
         "Accept": "application/json",
         "X-CSRF-Token": token
