@@ -16,10 +16,10 @@
     "font-awesome": "~4.5.0",
     "pretender": "~0.10.1",
     "Faker": "~3.0.0",
-    "filesize": "~3.3.0",
     "bootstrap-switch": "~3.3.2",
     "blob-polyfill": "^1.0.20150320",
-    "lodash": "~3.7.0"
+    "lodash": "~3.7.0",
+    "jquery": "~1.11.3"
   },
   "devDependencies": {
     "blanket": "5e94fc30f2e694bb5c3718ddcbf60d467f4b4d26"
