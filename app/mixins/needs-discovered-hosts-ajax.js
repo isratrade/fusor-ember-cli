@@ -18,5 +18,24 @@ export default Ember.Mixin.create({
         'X-CSRF-Token': token
       }
     }).then(() => deployment.reload()); // Reload to update models
+  },
+
+  postDiscoveredEngineHost(deployment, selectedRhevEngineHost) {
+    const token = Ember.$('meta[name="csrf-token"]').attr('content');
+    let engineId = selectedRhevEngineHost.get('id');
+    let engineName = selectedRhevEngineHost.get('name');
+
+    return request({
+      url: window.fusorServer + '/fusor/api/v21/deployments/' + deployment.get('id') + '/add_rhv_engine',
+      type: 'PUT',
+      data: JSON.stringify({'engine_id': engineId,
+                            'engine_name': engineName }),
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'X-CSRF-Token': token
+      }
+    }).then(() => deployment.reload()); // Reload to update models
   }
+
 });
